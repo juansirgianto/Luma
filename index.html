@@ -8,21 +8,25 @@
 </head>
 <body>
   <canvas id="webgl-canvas"></canvas>
-  <!-- Tombol POI -->
-<button class="poi-button" onclick="goToPOI('home')">Home</button>
-<button class="poi-button" onclick="goToPOI('kitchen')">Kitchen</button>
-<button class="poi-button" onclick="goToPOI('lift')">Lift</button>
 
 <!-- Statistik Kamera -->
 <div id="statsBox" class="camera-stats"></div>
 
+<!-- Home button -->
 <button id="homePOIButton" class="poi-html-button">HOME</button>
-
-<div id="descriptionBox" class="description-box" style="display: none;">
-  <h4>🏠 Home</h4>
-  <p>Ini adalah area utama rumah atau ruangan utama.</p>
+<div id="homedescription" class="description-box" style="display: none;">
+  <img src="/hotel.jpg" alt="" style="width: 300px; height: 300px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+  <h4 style="margin: 12px;">🏠 Home</h4>
+  <p style="margin: 12px;">Ini adalah area utama rumah atau ruangan utama.</p>
 </div>
 
+<!-- Hotel button -->
+<button id="hotelPOIButton" class="poi-html-button">HOTEL</button>
+<div id="hoteldescription" class="description-box" style="display: none;">
+  <img src="/hotel1.jpg" alt="" style="width: 300px; height: 300px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+  <h4 style="margin: 12px;"> Hotel</h4>
+  <p style="margin: 12px;">Ini adalah area perhotelan.</p>
+</div>
 
 
   <script type="importmap">

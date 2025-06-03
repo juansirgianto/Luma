@@ -10,37 +10,10 @@ renderer.setPixelRatio(window.devicePixelRatio);
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-camera.position.set(0, 0, 2);
+camera.position.set(2.20, 1.66, -0.90);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
-
-const homePOIButton = document.getElementById('homePOIButton');
-const descriptionBox = document.getElementById('descriptionBox');
-
-window.addEventListener('click', onClick, false);
-
-function onClick(event) {
-  // Normalisasi koordinat mouse ke -1..1
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-  raycaster.setFromCamera(mouse, camera);
-
-  const intersects = raycaster.intersectObjects([textSprite]);
-  if (intersects.length > 0) {
-    // Tampilkan deskripsi
-    document.getElementById("descriptionBox").style.display = 'block';
-  }
-}
-
-// Saat tombol diklik → tampilkan deskripsi
-homePOIButton.addEventListener('click', () => {
-  descriptionBox.style.display = 'block';
-});
 
 // 🔌 Gaussian Splats dari Luma AI
 const splats = new LumaSplatsThree({
@@ -49,49 +22,75 @@ const splats = new LumaSplatsThree({
 });
 scene.add(splats);
 
-// 🧱 POI dan Label 3D
-const poiPosition = new THREE.Vector3(0, 0, 2);
-const poi = new THREE.Mesh();
-poi.position.copy(poiPosition);
-scene.add(poi);
+// 🌍 State untuk zoom dan orbit
+let orbiting = false;
+let orbitStartTime = 0;
+const orbitDuration = 15000;
 
-// 🧾 Fungsi membuat text sprite 2D
-function createTextSprite(message) {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-  canvas.width = 256;
-  canvas.height = 128;
+let zooming = false;
+let zoomStartTime = 0;
+const zoomDuration = 1500;
+const zoomFrom = new THREE.Vector3();
+const zoomTo = new THREE.Vector3();
 
-  context.fillStyle = 'white';
-  context.font = '28px Arial';
-  context.fillText(message, 10, 50);
+let orbitTarget = null;
 
-  const texture = new THREE.CanvasTexture(canvas);
-  const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
-  const sprite = new THREE.Sprite(material);
-  sprite.scale.set(0.5, 0.25, 1);
-  return sprite;
+// 📦 POI Data
+const POIs = [
+  {
+    id: 'home',
+    position: new THREE.Vector3(-0.32, 0, 0.50),
+    buttonId: 'homePOIButton',
+    descriptionId: 'homedescription'
+  },
+  {
+    id: 'hotel',
+    position: new THREE.Vector3(-0.20, 0, -0.90),
+    buttonId: 'hotelPOIButton',
+    descriptionId: 'hoteldescription'
+  }
+];
+
+// 🧭 Setup POI tombol & posisi
+POIs.forEach(poi => {
+  const button = document.getElementById(poi.buttonId);
+  const desc = document.getElementById(poi.descriptionId);
+
+  button.addEventListener('click', (e) => {
+    e.stopPropagation(); // Agar tidak menghentikan orbit
+    startZoomAndOrbit(poi);
+  });
+
+  poi.update = function () {
+    const vector = poi.position.clone().project(camera);
+    const x = (vector.x + 1) / 2 * window.innerWidth;
+    const y = -(vector.y - 1) / 2 * window.innerHeight;
+    button.style.left = `${x}px`;
+    button.style.top = `${y}px`;
+  };
+});
+
+// 🚀 Fungsi: Zoom lalu orbit
+function startZoomAndOrbit(poi) {
+  zooming = true;
+  zoomStartTime = performance.now();
+  orbitTarget = poi;
+
+  zoomFrom.copy(camera.position);
+  
+  const radius = 1.5;
+  const initialAngle = 0; // bisa ubah untuk sudut awal lain jika mau
+  zoomTo.set(
+    poi.position.x + radius * Math.cos(initialAngle),
+    poi.position.y + 0.5,
+    poi.position.z + radius * Math.sin(initialAngle)
+  );
+
+  document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
+  document.getElementById(poi.descriptionId).style.display = 'block';
+
+  orbiting = false; // orbit mulai setelah zoom selesai
 }
-
-// 🏠 Tampilkan tulisan "HOME" di atas titik
-const textSprite = createTextSprite("HOME");
-scene.add(textSprite);
-
-// 📦 POI lainnya
-const POIS = {
-  home: poiPosition,
-  kitchen: new THREE.Vector3(0.5, 0.2, 1.5),
-  lift: new THREE.Vector3(-0.5, 0.3, 1.8)
-};
-
-// 🎯 Fungsi pindah kamera ke POI
-window.goToPOI = function (key) {
-  const pos = POIS[key];
-  if (!pos) return;
-  camera.position.set(pos.x + 0.5, pos.y + 0.3, pos.z + 1);
-  controls.target.copy(pos);
-  controls.update();
-};
 
 // 📊 Statistik kamera
 const statsBox = document.getElementById('statsBox');
@@ -109,33 +108,63 @@ Camera Rotation:
   z: ${rot.z.toFixed(2)}`;
 }
 
-function updateButtonPosition() {
-  const vector = poiPosition.clone().project(camera);
-  const x = (vector.x + 1) / 2 * window.innerWidth;
-  const y = -(vector.y - 1) / 2 * window.innerHeight;
-  homePOIButton.style.left = `${x}px`;
-  homePOIButton.style.top = `${y}px`;
-}
-
-// 🔁 Render Loop
+// 🔁 Animasi utama
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
   renderer.render(scene, camera);
   updateCameraStats();
-  updateButtonPosition();
+
+  POIs.forEach(p => p.update());
+
+  const now = performance.now();
+
+  // Zooming logic
+  if (zooming && orbitTarget) {
+    const t = Math.min(1, (now - zoomStartTime) / zoomDuration);
+    camera.position.lerpVectors(zoomFrom, zoomTo, t);
+    controls.target.copy(orbitTarget.position);
+    controls.update();
+
+    if (t >= 1) {
+      zooming = false;
+      orbiting = true;
+      orbitStartTime = now;
+    }
+  }
+
+  // Orbiting logic
+  if (orbiting && orbitTarget) {
+    const elapsed = now - orbitStartTime;
+    const t = elapsed / orbitDuration;
+    const angle = t * Math.PI * 2;
+
+    const radius = 1.5;
+    camera.position.x = orbitTarget.position.x + radius * Math.cos(angle);
+    camera.position.z = orbitTarget.position.z + radius * Math.sin(angle);
+    camera.position.y = orbitTarget.position.y + 0.5;
+
+    controls.target.copy(orbitTarget.position);
+    controls.update();
+
+    if (t >= 1) orbiting = false;
+  }
 }
 animate();
 
-// 🔁 Resize handler
+// 📱 Resize
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
+// ❌ Klik di luar tombol → hentikan semua
 window.addEventListener('click', (e) => {
-  if (!descriptionBox.contains(e.target) && e.target !== homePOIButton) {
-    descriptionBox.style.display = 'none';
+  if (!e.target.classList.contains('poi-html-button')) {
+    zooming = false;
+    orbiting = false;
+    orbitTarget = null;
+    document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
   }
 });
