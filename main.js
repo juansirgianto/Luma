@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { LumaSplatsThree } from '@lumaai/luma-web';
+import { LumaSplatsSemantics } from "@lumaai/luma-web";
+
 
 // 🎯 Setup dasar
 const canvas = document.getElementById('webgl-canvas');
@@ -9,6 +11,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 
 const scene = new THREE.Scene();
+// scene.background = new THREE.Color(0x000000); // hitam
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
 camera.position.set(2.20, 1.66, -0.90);
 
@@ -21,6 +24,8 @@ const splats = new LumaSplatsThree({
   particleRevealEnabled: true
 });
 scene.add(splats);
+
+// splats.semanticsMask = LumaSplatsSemantics.FOREGROUND;
 
 // 🌍 State untuk zoom dan orbit
 let orbiting = false;
@@ -48,6 +53,12 @@ const POIs = [
     position: new THREE.Vector3(-0.20, 0, -0.90),
     buttonId: 'hotelPOIButton',
     descriptionId: 'hoteldescription'
+  },
+  {
+    id: 'shop',
+    position: new THREE.Vector3(0.58, 0, -0.32),
+    buttonId: 'shopPOIButton',
+    descriptionId: 'shopdescription'
   }
 ];
 
@@ -77,7 +88,7 @@ function startZoomAndOrbit(poi) {
   orbitTarget = poi;
 
   zoomFrom.copy(camera.position);
-  
+
   const radius = 1.5;
   const initialAngle = 0; // bisa ubah untuk sudut awal lain jika mau
   zoomTo.set(
@@ -91,6 +102,56 @@ function startZoomAndOrbit(poi) {
 
   orbiting = false; // orbit mulai setelah zoom selesai
 }
+
+// 🔺 Buat geometry, material, dan mesh
+const cubeGeometry = new THREE.BoxGeometry(0.25, 0.35, 0.28); // Ukuran X, Y, Z
+const cubeMaterial = new THREE.MeshBasicMaterial({
+  color: 0xff0000,
+  transparent: true,
+  opacity: 0.5
+});
+const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+cube.position.set(0.26, 0, 0.08); // X, Y, Z
+// contoh:
+cube.rotation.set(0, Math.PI / 3.3, 0); // rotasi 45 derajat di sumbu Y
+scene.add(cube);
+
+// 🔺 Buat geometry, material, dan mesh
+const cubeGeometry1 = new THREE.BoxGeometry(0.25, 0.35, 0.28); // Ukuran X, Y, Z
+const cubeMaterial1 = new THREE.MeshBasicMaterial({
+  color: 0x0000ff,
+  transparent: true,
+  opacity: 0.5
+});
+const cube1 = new THREE.Mesh(cubeGeometry1, cubeMaterial1);
+cube1.position.set(0.33, 0, -0.19); // X, Y, Z
+cube1.rotation.set(0, Math.PI / 3.3, 0); // rotasi 45 derajat di sumbu Y
+scene.add(cube1);
+
+// 🔺 Buat geometry, material, dan mesh
+const cubeGeometry2 = new THREE.BoxGeometry(0.25, 0.35, 0.28); // Ukuran X, Y, Z
+const cubeMaterial2 = new THREE.MeshBasicMaterial({
+  color: 0xffff00,
+  transparent: true,
+  opacity: 0.5
+});
+const cube2 = new THREE.Mesh(cubeGeometry2, cubeMaterial2);
+cube2.position.set(0.38, 0, -0.50); // X, Y, Z
+cube2.rotation.set(0, Math.PI / 3.3, 0); // rotasi 45 derajat di sumbu Y
+scene.add(cube2);
+
+// 🔺 Buat geometry, material, dan mesh
+const cubeGeometry3 = new THREE.BoxGeometry(0.25, 0.35, 0.28); // Ukuran X, Y, Z
+const cubeMaterial3 = new THREE.MeshBasicMaterial({
+  color: 0x0000ff,
+  transparent: true,
+  opacity: 0.5
+});
+const cube3 = new THREE.Mesh(cubeGeometry3, cubeMaterial3);
+cube3.position.set(0.52, 0, -0.74); // X, Y, Z
+cube3.rotation.set(0, Math.PI / 3.3, 0); // rotasi 45 derajat di sumbu Y
+scene.add(cube3);
+
 
 // 📊 Statistik kamera
 const statsBox = document.getElementById('statsBox');
@@ -107,6 +168,10 @@ Camera Rotation:
   y: ${rot.y.toFixed(2)}
   z: ${rot.z.toFixed(2)}`;
 }
+
+// axis helper
+const axesHelper = new THREE.AxesHelper( 5 );
+scene.add( axesHelper );
 
 // 🔁 Animasi utama
 function animate() {
