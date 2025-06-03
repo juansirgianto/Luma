@@ -1,3 +1,9 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
+}
+
 .poi-button {
   position: absolute;  
   top: 20px;
@@ -53,9 +59,8 @@
   left: 20px;
   background: rgba(0, 0, 0, 0.5);
   color: white;
-  /* padding: 12px; */
   border-radius: 8px;
-  height: 400px;
+  height: auto;
   max-width: 300px;
   z-index: 999;
 }

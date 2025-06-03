@@ -152,6 +152,33 @@ cube3.position.set(0.52, 0, -0.74); // X, Y, Z
 cube3.rotation.set(0, Math.PI / 3.3, 0); // rotasi 45 derajat di sumbu Y
 scene.add(cube3);
 
+const cubePOIs = [
+  {
+    id: 'cube0',
+    mesh: cube,
+    position: cube.position,
+    descriptionId: 'cubedescription'
+  },
+  {
+    id: 'cube1',
+    mesh: cube1,
+    position: cube1.position,
+    descriptionId: 'cubedescription1'
+  },
+  {
+    id: 'cube2',
+    mesh: cube2,
+    position: cube2.position,
+    descriptionId: 'cubedescription2'
+  },
+  {
+    id: 'cube3',
+    mesh: cube3,
+    position: cube3.position,
+    descriptionId: 'cubedescription3'
+  }
+];
+
 
 // 📊 Statistik kamera
 const statsBox = document.getElementById('statsBox');
@@ -192,6 +219,46 @@ const amenitiesButton = document.querySelector('#navbar button:nth-child(3)');
 
 // 🧩 Array kubus
 const cubes = [cube, cube1, cube2, cube3];
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+let hoveredCube = null;
+
+// 🖱️ Hover event
+canvas.addEventListener('mousemove', (event) => {
+  const rect = canvas.getBoundingClientRect();
+  mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(cubes);
+
+  if (intersects.length > 0) {
+    const cube = intersects[0].object;
+
+    if (hoveredCube !== cube) {
+      if (hoveredCube) {
+        hoveredCube.material.color.copy(hoveredCube.userData.originalColor || hoveredCube.material.color);
+      }
+
+      hoveredCube = cube;
+
+      if (!cube.userData.originalColor) {
+        cube.userData.originalColor = cube.material.color.clone();
+      }
+
+      cube.material.color.set(0x00bfff);
+    }
+
+    canvas.style.cursor = 'pointer'; // Bonus: ubah cursor
+  } else {
+    if (hoveredCube) {
+      hoveredCube.material.color.copy(hoveredCube.userData.originalColor);
+      hoveredCube = null;
+    }
+
+    canvas.style.cursor = 'default';
+  }
+});
 
 // Fungsi: atur visibilitas POI (tombol & deskripsi)
 function setPOIVisibility(visible) {
@@ -260,6 +327,42 @@ function setDefaultHomeState() {
 
 setDefaultHomeState(); // 🔧 panggil saat pertama kali
 
+// cube click event
+function onCanvasClick(event) {
+  orbiting = false;
+  const rect = canvas.getBoundingClientRect();
+  mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(cubes);
+
+  if (intersects.length > 0) {
+    const clickedCube = intersects[0].object;
+
+    // Temukan POI yang sesuai dari cubePOIs
+    const cubePOI = cubePOIs.find(c => c.mesh === clickedCube);
+
+    if (cubePOI) {
+      // Zoom & orbit ke cube
+      startZoomAndOrbit(cubePOI);
+
+      // Tampilkan deskripsi yang sesuai
+      document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
+      document.getElementById(cubePOI.descriptionId).style.display = 'block';
+
+      // Highlight hijau sementara
+      if (!clickedCube.userData.originalColor) {
+        clickedCube.userData.originalColor = clickedCube.material.color.clone();
+      }
+      clickedCube.material.color.set(0x00ff00);
+      setTimeout(() => {
+        clickedCube.material.color.copy(clickedCube.userData.originalColor);
+      }, 300);
+    }
+  }
+}
+
 // 🔁 Animasi utama
 function animate() {
   requestAnimationFrame(animate);
@@ -303,6 +406,7 @@ function animate() {
   }
 }
 animate();
+canvas.addEventListener('click', onCanvasClick);
 
 // 📱 Resize
 window.addEventListener('resize', () => {
@@ -313,10 +417,16 @@ window.addEventListener('resize', () => {
 
 // ❌ Klik di luar tombol → hentikan semua
 window.addEventListener('click', (e) => {
-  if (!e.target.classList.contains('poi-html-button')) {
-    zooming = false;
-    orbiting = false;
-    orbitTarget = null;
-    document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
-  }
+  // Abaikan klik pada canvas karena sudah ditangani oleh raycaster (klik cube)
+  if (
+    e.target.tagName === 'CANVAS' ||
+    e.target.classList.contains('poi-html-button') ||
+    e.target.closest('.description-box')
+  ) return;
+
+  // Tutup semua deskripsi jika klik di luar
+  zooming = false;
+  orbiting = false;
+  orbitTarget = null;
+  document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
 });
