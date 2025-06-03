@@ -39,6 +39,8 @@ const zoomFrom = new THREE.Vector3();
 const zoomTo = new THREE.Vector3();
 
 let orbitTarget = null;
+let currentMode = 'home'; // 'home', 'apartments', 'amenities'
+let clickOnCube = false;
 
 // 📦 POI Data
 const POIs = [
@@ -277,6 +279,7 @@ function setCubesVisibility(visible) {
 
 // HOME: hanya Luma AI render
 homeButton.addEventListener('click', () => {
+  currentMode = 'home';
   setPOIVisibility(false);
   setCubesVisibility(false);
   zooming = false;
@@ -287,6 +290,7 @@ homeButton.addEventListener('click', () => {
 
 // APARTMENTS: tampilkan hanya kubus
 apartmentsButton.addEventListener('click', () => {
+  currentMode = 'apartments';
   setPOIVisibility(false);
   setCubesVisibility(true);
   zooming = false;
@@ -297,6 +301,7 @@ apartmentsButton.addEventListener('click', () => {
 
 // AMENITIES: tampilkan hanya POI
 amenitiesButton.addEventListener('click', () => {
+  currentMode = 'amenities';
   setPOIVisibility(true);
   setCubesVisibility(false);
   zooming = false;
@@ -329,6 +334,9 @@ setDefaultHomeState(); // 🔧 panggil saat pertama kali
 
 // cube click event
 function onCanvasClick(event) {
+  if (currentMode !== 'apartments') return;
+  
+  clickOnCube = true;
   orbiting = false;
   const rect = canvas.getBoundingClientRect();
   mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -417,14 +425,19 @@ window.addEventListener('resize', () => {
 
 // ❌ Klik di luar tombol → hentikan semua
 window.addEventListener('click', (e) => {
-  // Abaikan klik pada canvas karena sudah ditangani oleh raycaster (klik cube)
+  // Abaikan klik pada POI button atau deskripsi
   if (
-    e.target.tagName === 'CANVAS' ||
     e.target.classList.contains('poi-html-button') ||
     e.target.closest('.description-box')
   ) return;
 
-  // Tutup semua deskripsi jika klik di luar
+  // Jika barusan klik cube, jangan tutup deskripsi
+  if (clickOnCube) {
+    clickOnCube = false;
+    return;
+  }
+
+  // Tutup semua deskripsi & orbit
   zooming = false;
   orbiting = false;
   orbitTarget = null;
