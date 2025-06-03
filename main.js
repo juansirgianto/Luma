@@ -173,6 +173,93 @@ Camera Rotation:
 const axesHelper = new THREE.AxesHelper( 5 );
 scene.add( axesHelper );
 
+// navbar active
+const navbarButtons = document.querySelectorAll('#navbar button');
+navbarButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    // Reset semua tombol
+    navbarButtons.forEach(btn => btn.classList.remove('active'));
+
+    // Aktifkan tombol yang diklik
+    button.classList.add('active');
+  });
+});
+
+// 🧭 Tangkap tombol navigasi utama
+const homeButton = document.querySelector('#navbar button:nth-child(1)');
+const apartmentsButton = document.querySelector('#navbar button:nth-child(2)');
+const amenitiesButton = document.querySelector('#navbar button:nth-child(3)');
+
+// 🧩 Array kubus
+const cubes = [cube, cube1, cube2, cube3];
+
+// Fungsi: atur visibilitas POI (tombol & deskripsi)
+function setPOIVisibility(visible) {
+  POIs.forEach(poi => {
+    const btn = document.getElementById(poi.buttonId);
+    const desc = document.getElementById(poi.descriptionId);
+    btn.style.display = visible ? 'block' : 'none';
+    desc.style.display = 'none';
+  });
+}
+
+// Fungsi: atur visibilitas kubus
+function setCubesVisibility(visible) {
+  cubes.forEach(cube => cube.visible = visible);
+}
+
+// HOME: hanya Luma AI render
+homeButton.addEventListener('click', () => {
+  setPOIVisibility(false);
+  setCubesVisibility(false);
+  zooming = false;
+  orbiting = false;
+  orbitTarget = null;
+  document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
+});
+
+// APARTMENTS: tampilkan hanya kubus
+apartmentsButton.addEventListener('click', () => {
+  setPOIVisibility(false);
+  setCubesVisibility(true);
+  zooming = false;
+  orbiting = false;
+  orbitTarget = null;
+  document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
+});
+
+// AMENITIES: tampilkan hanya POI
+amenitiesButton.addEventListener('click', () => {
+  setPOIVisibility(true);
+  setCubesVisibility(false);
+  zooming = false;
+  orbiting = false;
+  orbitTarget = null;
+  document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
+});
+
+// SET DEFAULT HOME
+function setDefaultHomeState() {
+  // Sembunyikan semua deskripsi
+  document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
+
+  // Sembunyikan semua POI button
+  POIs.forEach(poi => {
+    const button = document.getElementById(poi.buttonId);
+    if (button) button.style.display = 'none';
+  });
+
+  // Sembunyikan semua kubus apartemen
+  [cube, cube1, cube2, cube3].forEach(c => c.visible = false);
+
+  // Reset status orbit/zoom
+  orbiting = false;
+  zooming = false;
+  orbitTarget = null;
+}
+
+setDefaultHomeState(); // 🔧 panggil saat pertama kali
+
 // 🔁 Animasi utama
 function animate() {
   requestAnimationFrame(animate);
