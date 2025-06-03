@@ -30,7 +30,7 @@ scene.add(splats);
 // 🌍 State untuk zoom dan orbit
 let orbiting = false;
 let orbitStartTime = 0;
-const orbitDuration = 15000;
+// const orbitDuration = 50000;
 
 let zooming = false;
 let zoomStartTime = 0;
@@ -67,7 +67,6 @@ const POIs = [
 // 🧭 Setup POI tombol & posisi
 POIs.forEach(poi => {
   const button = document.getElementById(poi.buttonId);
-  const desc = document.getElementById(poi.descriptionId);
 
   button.addEventListener('click', (e) => {
     e.stopPropagation(); // Agar tidak menghentikan orbit
@@ -199,8 +198,8 @@ Camera Rotation:
 }
 
 // axis helper
-const axesHelper = new THREE.AxesHelper( 5 );
-scene.add( axesHelper );
+// const axesHelper = new THREE.AxesHelper( 5 );
+// scene.add( axesHelper );
 
 // navbar active
 const navbarButtons = document.querySelectorAll('#navbar button');
@@ -441,5 +440,4 @@ window.addEventListener('click', (e) => {
   zooming = false;
   orbiting = false;
   orbitTarget = null;
-  document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
 });
