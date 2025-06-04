@@ -155,6 +155,7 @@ cube.position.set(0.26, 0, 0.08); // X, Y, Z
 // contoh:
 cube.rotation.set(0, Math.PI / 3.3, 0); // rotasi 45 derajat di sumbu Y
 scene.add(cube);
+cube.userData.status = 'sold';
 
 // 🔺 Buat geometry, material, dan mesh
 const cubeGeometry1 = new THREE.BoxGeometry(0.25, 0.35, 0.28); // Ukuran X, Y, Z
@@ -167,6 +168,7 @@ const cube1 = new THREE.Mesh(cubeGeometry1, cubeMaterial1);
 cube1.position.set(0.33, 0, -0.19); // X, Y, Z
 cube1.rotation.set(0, Math.PI / 3.3, 0); // rotasi 45 derajat di sumbu Y
 scene.add(cube1);
+cube1.userData.status = 'available';
 
 // 🔺 Buat geometry, material, dan mesh
 const cubeGeometry2 = new THREE.BoxGeometry(0.25, 0.35, 0.28); // Ukuran X, Y, Z
@@ -179,6 +181,7 @@ const cube2 = new THREE.Mesh(cubeGeometry2, cubeMaterial2);
 cube2.position.set(0.38, 0, -0.50); // X, Y, Z
 cube2.rotation.set(0, Math.PI / 3.3, 0); // rotasi 45 derajat di sumbu Y
 scene.add(cube2);
+cube2.userData.status = 'booked';
 
 // 🔺 Buat geometry, material, dan mesh
 const cubeGeometry3 = new THREE.BoxGeometry(0.25, 0.35, 0.28); // Ukuran X, Y, Z
@@ -191,6 +194,7 @@ const cube3 = new THREE.Mesh(cubeGeometry3, cubeMaterial3);
 cube3.position.set(0.52, 0, -0.74); // X, Y, Z
 cube3.rotation.set(0, Math.PI / 3.3, 0); // rotasi 45 derajat di sumbu Y
 scene.add(cube3);
+cube3.userData.status = 'available';
 
 const cubePOIs = [
   {
@@ -218,6 +222,53 @@ const cubePOIs = [
     descriptionId: 'cubedescription3'
   }
 ];
+
+const cubes = [cube, cube1, cube2, cube3];
+const hiddenStatuses = new Set(); // status yang ingin disembunyikan
+
+// filter button
+function filterCubesByStatus(status) {
+  cubes.forEach(c => {
+    const isMatch = c.userData.status !== status; // 🔄 dibalik: yang BUKAN status yang dipilih akan tampil
+    c.visible = isMatch;
+  });
+
+  // Sembunyikan semua deskripsi juga
+  document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
+}
+
+document.getElementById('filterAvailable').addEventListener('click', (e) => {
+  toggleFilter('available', e.target);
+});
+
+document.getElementById('filterSold').addEventListener('click', (e) => {
+  toggleFilter('sold', e.target);
+});
+
+document.getElementById('filterBooked').addEventListener('click', (e) => {
+  toggleFilter('booked', e.target);
+});
+
+function toggleFilter(status, button) {
+  if (hiddenStatuses.has(status)) {
+    hiddenStatuses.delete(status);
+    button.classList.remove('opacity-50'); // Un-highlight (opsional)
+  } else {
+    hiddenStatuses.add(status);
+    button.classList.add('opacity-50'); // Highlight tombol aktif (opsional)
+  }
+
+  applyFilter();
+}
+
+function applyFilter() {
+  cubes.forEach(c => {
+    c.visible = !hiddenStatuses.has(c.userData.status);
+  });
+
+  // Sembunyikan deskripsi juga
+  document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
+}
 
 // 📊 Statistik kamera
 const statsBox = document.getElementById('statsBox');
@@ -256,8 +307,6 @@ const homeButton = document.querySelector('#navbar button:nth-child(1)');
 const apartmentsButton = document.querySelector('#navbar button:nth-child(2)');
 const amenitiesButton = document.querySelector('#navbar button:nth-child(3)');
 
-// 🧩 Array kubus
-const cubes = [cube, cube1, cube2, cube3];
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 let hoveredCube = null;
@@ -335,6 +384,8 @@ homeButton.addEventListener('click', () => {
   orbiting = false;
   orbitTarget = null;
   document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
+  document.getElementById('filterbar').style.display = 'none';
+  document.getElementById('listpoi').style.display = 'none';
 });
 
 // APARTMENTS: tampilkan hanya kubus
@@ -356,6 +407,8 @@ apartmentsButton.addEventListener('click', () => {
   orbiting = false;
   orbitTarget = null;
   document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
+  document.getElementById('filterbar').style.display = 'flex';
+  document.getElementById('listpoi').style.display = 'none';
 });
 
 // AMENITIES: tampilkan hanya POI
@@ -377,12 +430,16 @@ amenitiesButton.addEventListener('click', () => {
   orbiting = false;
   orbitTarget = null;
   document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
+  document.getElementById('filterbar').style.display = 'none';
+  document.getElementById('listpoi').style.display = 'flex';
 });
 
 // SET DEFAULT HOME
 function setDefaultHomeState() {
   // Sembunyikan semua deskripsi
   document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
+  document.getElementById('filterbar').style.display = 'none';
+  document.getElementById('listpoi').style.display = 'none';
 
   // Sembunyikan semua POI button
   POIs.forEach(poi => {
@@ -464,7 +521,6 @@ function animate() {
 
   // Reset camera smoothly ke posisi awal
   if (resettingCamera) {
-  const now = performance.now();
   const linearT = Math.min(1, (now - resetStartTime) / resetDuration);
   const t = linearT * linearT * (3 - 2 * linearT); // easing: smoothstep
 
@@ -554,9 +610,10 @@ window.addEventListener('click', (e) => {
 startOrbitAfterDelay(); // tanpa argumen = orbit ke fokus kamera saat ini
 });
 
-// ❌ Scroll mouse → matikan orbit & reset idle timer
 window.addEventListener('wheel', () => {
   orbiting = false;
+  zooming = false;
+  resettingCamera = false;
   resetIdleTimer();
   startOrbitAfterDelay(); // mulai ulang hitung idle 5 detik
 });
