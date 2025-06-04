@@ -27,14 +27,20 @@
 <!-- Home button -->
 <button id="homePOIButton" class="poi-html-button">HOME</button>
 <div id="homedescription" class="description-box" style="display: none;">
+  <button class="close-description">
+    <i data-lucide="x"></i>
+  </button>
   <img src="/hotel.jpg" alt="" style="width: 300px; height: 300px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-  <h4 style="margin: 12px;">🏠 Home</h4>
+  <h4 style="margin: 12px;">Home</h4>
   <p style="margin: 12px;">Ini adalah area utama rumah atau ruangan utama.</p>
 </div>
 
 <!-- Hotel button -->
 <button id="hotelPOIButton" class="poi-html-button">HOTEL</button>
 <div id="hoteldescription" class="description-box" style="display: none;">
+  <button class="close-description">
+    <i data-lucide="x"></i>
+  </button>
   <img src="/hotel1.jpg" alt="" style="width: 300px; height: 300px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
   <h4 style="margin: 12px;"> Hotel</h4>
   <p style="margin: 12px;">Ini adalah area perhotelan.</p>
@@ -43,6 +49,9 @@
 <!-- Shop button -->
 <button id="shopPOIButton" class="poi-html-button">SHOPS</button>
 <div id="shopdescription" class="description-box" style="display: none;">
+  <button class="close-description">
+    <i data-lucide="x"></i>
+  </button>
   <img src="/hotel1.jpg" alt="" style="width: 300px; height: 300px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
   <h4 style="margin: 12px;"> Hotel</h4>
   <p style="margin: 12px;">Ini adalah area perhotelan.</p>
@@ -50,26 +59,38 @@
 
 <!-- Deskripsi Cube -->
 <div id="cubedescription" class="description-box" style="display: none;">
+  <button class="close-description">
+    <i data-lucide="x"></i>
+  </button>
   <img src="/room.jpg" alt="" style="width: 300px; height: 300px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-  <h4 style="margin: 12px;">🏢 Apartment Unit A</h4>
-  <p>Ini adalah unit apartemen yang tersedia.</p>
+  <h4 style="margin: 12px;">Apartment Unit A</h4>
+  <p style="margin: 12px;">Ini adalah unit apartemen yang tersedia.</p>
 </div>
 <!-- Deskripsi Cube -->
 <div id="cubedescription1" class="description-box" style="display: none;">
+  <button class="close-description">
+    <i data-lucide="x"></i>
+  </button>
   <img src="/room.jpg" alt="" style="width: 300px; height: 300px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-  <h4 style="margin: 12px;">🏢 Apartment Unit B</h4>
+  <h4 style="margin: 12px;">Apartment Unit B</h4>
   <p style="margin: 12px;">Ini adalah unit apartemen yang tersedia.</p>
 </div>
 <!-- Deskripsi Cube -->
 <div id="cubedescription2" class="description-box" style="display: none;">
+  <button class="close-description">
+    <i data-lucide="x"></i>
+  </button>
   <img src="/room.jpg" alt="" style="width: 300px; height: 300px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-  <h4 style="margin: 12px;">🏢 Apartment Unit C</h4>
+  <h4 style="margin: 12px;">Apartment Unit C</h4>
   <p style="margin: 12px;">Ini adalah unit apartemen yang tersedia.</p>
 </div>
 <!-- Deskripsi Cube -->
 <div id="cubedescription3" class="description-box" style="display: none;">
+  <button class="close-description">
+    <i data-lucide="x"></i>
+  </button>
   <img src="/room.jpg" alt="" style="width: 300px; height: 300px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-  <h4 style="margin: 12px;">🏢 Apartment Unit D</h4>
+  <h4 style="margin: 12px;">Apartment Unit D</h4>
   <p style="margin: 12px;">Ini adalah unit apartemen yang tersedia.</p>
 </div>
 
@@ -83,6 +104,14 @@
       }
     }
   </script>
+  <script type="module">
+  import { createIcons, X } from 'https://unpkg.com/lucide@latest/dist/esm/lucide.js';
+
+  createIcons({
+    icons: { X }
+  });
+</script>
+
 
   <script type="module" src="./main.js"></script>
 </body>

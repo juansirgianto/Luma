@@ -3,12 +3,11 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { LumaSplatsThree } from '@lumaai/luma-web';
 import { LumaSplatsSemantics } from "@lumaai/luma-web";
 
-
 // 🎯 Setup dasar
 const canvas = document.getElementById('webgl-canvas');
 const renderer = new THREE.WebGLRenderer({ canvas });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setPixelRatio(window.devicePixelRatio, 2);
 
 const scene = new THREE.Scene();
 // scene.background = new THREE.Color(0x000000); // hitam
@@ -17,6 +16,8 @@ camera.position.set(2.20, 1.66, -0.90);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
+const initialCameraPosition = camera.position.clone();
+const initialControlsTarget = controls.target.clone();
 
 // 🔌 Gaussian Splats dari Luma AI
 const splats = new LumaSplatsThree({
@@ -26,21 +27,36 @@ const splats = new LumaSplatsThree({
 scene.add(splats);
 
 // splats.semanticsMask = LumaSplatsSemantics.FOREGROUND;
+let lastSelectedTarget = null; // bisa POI atau cube
 
 // 🌍 State untuk zoom dan orbit
 let orbiting = false;
 let orbitStartTime = 0;
-// const orbitDuration = 50000;
+const orbitDuration = 50000;
+let idleTimeout = null;
+const idleDelay = 3000; // 5 detik
 
 let zooming = false;
 let zoomStartTime = 0;
-const zoomDuration = 1500;
+const zoomDuration = 1000;
 const zoomFrom = new THREE.Vector3();
 const zoomTo = new THREE.Vector3();
 
 let orbitTarget = null;
 let currentMode = 'home'; // 'home', 'apartments', 'amenities'
 let clickOnCube = false;
+
+const resetTargetFrom = new THREE.Vector3();
+const resetTargetTo = initialControlsTarget.clone();
+
+const zoomTargetFrom = new THREE.Vector3();
+const zoomTargetTo = new THREE.Vector3();
+
+let resettingCamera = false;
+let resetStartTime = 0;
+const resetDuration = 1000; // ms
+const resetFrom = new THREE.Vector3();
+const resetTo = initialCameraPosition.clone(); // posisi awal kamera
 
 // 📦 POI Data
 const POIs = [
@@ -82,27 +98,50 @@ POIs.forEach(poi => {
   };
 });
 
+function resetIdleTimer() {
+  if (idleTimeout) clearTimeout(idleTimeout);
+}
+
+// Idle
+function startOrbitAfterDelay(poi) {
+  if (idleTimeout) clearTimeout(idleTimeout);
+
+  idleTimeout = setTimeout(() => {
+    orbiting = true;
+    orbitStartTime = performance.now();
+    orbitTarget = poi ?? controls.target.clone();
+  }, idleDelay);
+}
+
 // 🚀 Fungsi: Zoom lalu orbit
 function startZoomAndOrbit(poi) {
   zooming = true;
   zoomStartTime = performance.now();
   orbitTarget = poi;
 
+  // Kamera mulai dari posisi saat ini
   zoomFrom.copy(camera.position);
+  zoomTargetFrom.copy(controls.target);
 
   const radius = 1.5;
-  const initialAngle = 0; // bisa ubah untuk sudut awal lain jika mau
+  const initialAngle = 0;
   zoomTo.set(
     poi.position.x + radius * Math.cos(initialAngle),
     poi.position.y + 0.5,
     poi.position.z + radius * Math.sin(initialAngle)
   );
 
+  // Target orbit juga smooth
+  zoomTargetTo.copy(poi.position);
+
   document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
   document.getElementById(poi.descriptionId).style.display = 'block';
 
-  orbiting = false; // orbit mulai setelah zoom selesai
+  orbiting = false;
+  lastSelectedTarget = null;
+  startOrbitAfterDelay(poi);
 }
+
 
 // 🔺 Buat geometry, material, dan mesh
 const cubeGeometry = new THREE.BoxGeometry(0.25, 0.35, 0.28); // Ukuran X, Y, Z
@@ -180,7 +219,6 @@ const cubePOIs = [
   }
 ];
 
-
 // 📊 Statistik kamera
 const statsBox = document.getElementById('statsBox');
 function updateCameraStats() {
@@ -198,8 +236,8 @@ Camera Rotation:
 }
 
 // axis helper
-// const axesHelper = new THREE.AxesHelper( 5 );
-// scene.add( axesHelper );
+const axesHelper = new THREE.AxesHelper( 5 );
+scene.add( axesHelper );
 
 // navbar active
 const navbarButtons = document.querySelectorAll('#navbar button');
@@ -279,6 +317,18 @@ function setCubesVisibility(visible) {
 // HOME: hanya Luma AI render
 homeButton.addEventListener('click', () => {
   currentMode = 'home';
+
+  // 🚀 Mulai animasi reset kamera
+  resettingCamera = true;
+  resetStartTime = performance.now();
+
+  // ambil posisi terakhir kamera dan target saat ini
+  resetFrom.copy(camera.position.clone());
+  resetTo.copy(initialCameraPosition.clone());
+
+  resetTargetFrom.copy(controls.target.clone());
+  resetTargetTo.copy(initialControlsTarget.clone());
+
   setPOIVisibility(false);
   setCubesVisibility(false);
   zooming = false;
@@ -290,6 +340,16 @@ homeButton.addEventListener('click', () => {
 // APARTMENTS: tampilkan hanya kubus
 apartmentsButton.addEventListener('click', () => {
   currentMode = 'apartments';
+  // 🚀 Mulai animasi reset kamera
+  resettingCamera = true;
+  resetStartTime = performance.now();
+
+  // ambil posisi terakhir kamera dan target saat ini
+  resetFrom.copy(camera.position.clone());
+  resetTo.copy(initialCameraPosition.clone());
+
+  resetTargetFrom.copy(controls.target.clone());
+  resetTargetTo.copy(initialControlsTarget.clone());
   setPOIVisibility(false);
   setCubesVisibility(true);
   zooming = false;
@@ -301,6 +361,16 @@ apartmentsButton.addEventListener('click', () => {
 // AMENITIES: tampilkan hanya POI
 amenitiesButton.addEventListener('click', () => {
   currentMode = 'amenities';
+  // 🚀 Mulai animasi reset kamera
+  resettingCamera = true;
+  resetStartTime = performance.now();
+
+  // ambil posisi terakhir kamera dan target saat ini
+  resetFrom.copy(camera.position.clone());
+  resetTo.copy(initialCameraPosition.clone());
+
+  resetTargetFrom.copy(controls.target.clone());
+  resetTargetTo.copy(initialControlsTarget.clone());
   setPOIVisibility(true);
   setCubesVisibility(false);
   zooming = false;
@@ -343,6 +413,7 @@ function onCanvasClick(event) {
 
   raycaster.setFromCamera(mouse, camera);
   const intersects = raycaster.intersectObjects(cubes);
+  resetIdleTimer();
 
   if (intersects.length > 0) {
     const clickedCube = intersects[0].object;
@@ -352,6 +423,7 @@ function onCanvasClick(event) {
 
     if (cubePOI) {
       // Zoom & orbit ke cube
+      lastSelectedTarget = cubePOI;
       startZoomAndOrbit(cubePOI);
 
       // Tampilkan deskripsi yang sesuai
@@ -368,7 +440,17 @@ function onCanvasClick(event) {
       }, 300);
     }
   }
+  resetIdleTimer();
+  startOrbitAfterDelay(); // tanpa argumen = orbit ke fokus kamera saat ini
+
 }
+
+document.querySelectorAll('.close-description').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    btn.closest('.description-box').style.display = 'none';
+  });
+});
 
 // 🔁 Animasi utama
 function animate() {
@@ -381,19 +463,34 @@ function animate() {
 
   const now = performance.now();
 
+  // Reset camera smoothly ke posisi awal
+  if (resettingCamera) {
+  const now = performance.now();
+  const linearT = Math.min(1, (now - resetStartTime) / resetDuration);
+  const t = linearT * linearT * (3 - 2 * linearT); // easing: smoothstep
+
+  camera.position.lerpVectors(resetFrom, resetTo, t);
+  controls.target.lerpVectors(resetTargetFrom, resetTargetTo, t);
+  controls.update();
+
+  if (t >= 1) resettingCamera = false;
+}
+
   // Zooming logic
   if (zooming && orbitTarget) {
-    const t = Math.min(1, (now - zoomStartTime) / zoomDuration);
-    camera.position.lerpVectors(zoomFrom, zoomTo, t);
-    controls.target.copy(orbitTarget.position);
-    controls.update();
+  const t = Math.min(1, (now - zoomStartTime) / zoomDuration);
+  const eased = t * t * (3 - 2 * t); // smoothstep
 
-    if (t >= 1) {
-      zooming = false;
-      orbiting = true;
-      orbitStartTime = now;
-    }
+  camera.position.lerpVectors(zoomFrom, zoomTo, eased);
+  controls.target.lerpVectors(zoomTargetFrom, zoomTargetTo, eased);
+  controls.update();
+
+  if (t >= 1) {
+    zooming = false;
+    startOrbitAfterDelay(orbitTarget);
   }
+}
+
 
   // Orbiting logic
   if (orbiting && orbitTarget) {
@@ -420,6 +517,9 @@ window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
+  resetIdleTimer();
+  startOrbitAfterDelay(); // tanpa argumen = orbit ke fokus kamera saat ini
+
 });
 
 // ❌ Klik di luar tombol → hentikan semua
@@ -436,8 +536,16 @@ window.addEventListener('click', (e) => {
     return;
   }
 
-  // Tutup semua deskripsi & orbit
+  // Tutup semua deskripsi
+  // document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
+
+  // Matikan zoom dan orbit
   zooming = false;
   orbiting = false;
   orbitTarget = null;
+
+  // Reset idle timer dan mulai hitung ulang
+  resetIdleTimer();
+startOrbitAfterDelay(); // tanpa argumen = orbit ke fokus kamera saat ini
+
 });
