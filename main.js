@@ -27,14 +27,14 @@ const splats = new LumaSplatsThree({
 scene.add(splats);
 
 // splats.semanticsMask = LumaSplatsSemantics.FOREGROUND;
-let lastSelectedTarget = null; // bisa POI atau cube
 
 // 🌍 State untuk zoom dan orbit
+let orbitFrom = new THREE.Vector3(); // posisi awal orbit
 let orbiting = false;
 let orbitStartTime = 0;
-const orbitDuration = 50000;
+const orbitDuration = 40000;
 let idleTimeout = null;
-const idleDelay = 3000; // 5 detik
+const idleDelay = 5000; // 5 detik
 
 let zooming = false;
 let zoomStartTime = 0;
@@ -110,6 +110,7 @@ function startOrbitAfterDelay(poi) {
     orbiting = true;
     orbitStartTime = performance.now();
     orbitTarget = poi ?? controls.target.clone();
+    orbitFrom.copy(camera.position);
   }, idleDelay);
 }
 
@@ -138,7 +139,6 @@ function startZoomAndOrbit(poi) {
   document.getElementById(poi.descriptionId).style.display = 'block';
 
   orbiting = false;
-  lastSelectedTarget = null;
   startOrbitAfterDelay(poi);
 }
 
@@ -423,7 +423,6 @@ function onCanvasClick(event) {
 
     if (cubePOI) {
       // Zoom & orbit ke cube
-      lastSelectedTarget = cubePOI;
       startZoomAndOrbit(cubePOI);
 
       // Tampilkan deskripsi yang sesuai
@@ -491,7 +490,6 @@ function animate() {
   }
 }
 
-
   // Orbiting logic
   if (orbiting && orbitTarget) {
     const elapsed = now - orbitStartTime;
@@ -499,14 +497,21 @@ function animate() {
     const angle = t * Math.PI * 2;
 
     const radius = 1.5;
-    camera.position.x = orbitTarget.position.x + radius * Math.cos(angle);
-    camera.position.z = orbitTarget.position.z + radius * Math.sin(angle);
-    camera.position.y = orbitTarget.position.y + 0.5;
+    const targetPos = orbitTarget.position || orbitTarget;
 
-    controls.target.copy(orbitTarget.position);
+    // posisi target orbit
+    const nextOrbitPos = new THREE.Vector3(
+    targetPos.x + radius * Math.cos(angle),
+    targetPos.y + 0.5,
+    targetPos.z + radius * Math.sin(angle)
+  );
+
+    // lerp dari posisi kamera saat orbit dimulai
+    camera.position.lerp(nextOrbitPos, 0.01)
+    controls.target.copy(targetPos);
     controls.update();
 
-    if (t >= 1) orbiting = false;
+    if (t >= 1) orbitStartTime = now; // loop terus
   }
 }
 animate();
@@ -547,5 +552,11 @@ window.addEventListener('click', (e) => {
   // Reset idle timer dan mulai hitung ulang
   resetIdleTimer();
 startOrbitAfterDelay(); // tanpa argumen = orbit ke fokus kamera saat ini
+});
 
+// ❌ Scroll mouse → matikan orbit & reset idle timer
+window.addEventListener('wheel', () => {
+  orbiting = false;
+  resetIdleTimer();
+  startOrbitAfterDelay(); // mulai ulang hitung idle 5 detik
 });
