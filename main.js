@@ -80,6 +80,17 @@ const POIs = [
   }
 ];
 
+// Button List POI
+document.getElementById('listhome').addEventListener('click', () => {
+  document.getElementById('homePOIButton').click();
+});
+document.getElementById('listhotel').addEventListener('click', () => {
+  document.getElementById('hotelPOIButton').click();
+});
+document.getElementById('listshops').addEventListener('click', () => {
+  document.getElementById('shopPOIButton').click();
+});
+
 // 🧭 Setup POI tombol & posisi
 POIs.forEach(poi => {
   const button = document.getElementById(poi.buttonId);
@@ -588,7 +599,8 @@ window.addEventListener('click', (e) => {
   // Abaikan klik pada POI button atau deskripsi
   if (
     e.target.classList.contains('poi-html-button') ||
-    e.target.closest('.description-box')
+    e.target.closest('.description-box')||
+    e.target.classList.contains('list-button')
   ) return;
 
   // Jika barusan klik cube, jangan tutup deskripsi
