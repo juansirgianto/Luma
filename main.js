@@ -337,7 +337,22 @@ canvas.addEventListener('mousemove', (event) => {
   mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
   raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObjects(cubes);
+  const visibleCubes = cubes.filter(c => c.visible);
+const intersects = raycaster.intersectObjects(visibleCubes);
+
+  if (currentMode !== 'apartments') {
+    canvas.style.cursor = 'default';
+    if (hoveredCube) {
+      hoveredCube.material.color.copy(hoveredCube.userData.originalColor);
+      hoveredCube = null;
+    }
+    return;
+  }
+
+   if (currentMode === 'home') {
+    canvas.style.cursor = 'default';
+    return;
+  }
 
   if (intersects.length > 0) {
     const cube = intersects[0].object;
@@ -402,6 +417,8 @@ homeButton.addEventListener('click', () => {
   zooming = false;
   orbiting = false;
   orbitTarget = null;
+
+  document.getElementById('carouselModal').classList.add('hidden');
   document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
   document.getElementById('filterbar').style.display = 'none';
   document.getElementById('listpoi').style.display = 'none';
@@ -429,6 +446,7 @@ apartmentsButton.addEventListener('click', () => {
   setPOIVisibility(false);
   setCubesVisibility(true);
 
+  document.getElementById('carouselModal').classList.add('hidden');
   document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
   document.getElementById('filterbar').style.display = 'flex';
   document.getElementById('listpoi').style.display = 'none';
@@ -456,6 +474,7 @@ amenitiesButton.addEventListener('click', () => {
   setPOIVisibility(true);
   setCubesVisibility(false);
 
+  document.getElementById('carouselModal').classList.add('hidden');
   document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
   document.getElementById('filterbar').style.display = 'none';
   document.getElementById('listpoi').style.display = 'flex';
@@ -496,7 +515,9 @@ function onCanvasClick(event) {
   mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
   raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObjects(cubes);
+  const visibleCubes = cubes.filter(c => c.visible);
+const intersects = raycaster.intersectObjects(visibleCubes);
+
   resetIdleTimer();
 
   if (intersects.length > 0) {
@@ -686,6 +707,7 @@ if (cameraToNavbar) {
   }
 }
 animate();
+
 canvas.addEventListener('click', onCanvasClick);
 
 // 📱 Resize
@@ -704,7 +726,8 @@ window.addEventListener('click', (e) => {
   if (
     e.target.classList.contains('poi-html-button') ||
     e.target.closest('.description-box')||
-    e.target.classList.contains('list-button')
+    e.target.classList.contains('list-button')||
+    e.target.closest('#carouselModal')
   ) return;
 
   // Jika barusan klik cube, jangan tutup deskripsi
