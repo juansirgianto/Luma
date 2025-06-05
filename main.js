@@ -450,6 +450,10 @@ apartmentsButton.addEventListener('click', () => {
   document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
   document.getElementById('filterbar').style.display = 'flex';
   document.getElementById('listpoi').style.display = 'none';
+  // ✅ Reset semua filter: kosongkan hiddenStatuses
+  hiddenStatuses.clear();
+  document.querySelectorAll('#filterbar button').forEach(btn => btn.classList.remove('opacity-50'));
+  applyFilter();
 });
 
 
