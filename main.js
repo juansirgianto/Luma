@@ -58,6 +58,14 @@ const resetDuration = 1000; // ms
 const resetFrom = new THREE.Vector3();
 const resetTo = initialCameraPosition.clone(); // posisi awal kamera
 
+let cameraToNavbar = false;
+let navbarStartTime = 0;
+const navbarDuration = 1000;
+const navbarFrom = new THREE.Vector3();
+const navbarTo = new THREE.Vector3();
+const navbarTargetFrom = new THREE.Vector3();
+const navbarTargetTo = new THREE.Vector3();
+
 // 📦 POI Data
 const POIs = [
   {
@@ -402,44 +410,52 @@ homeButton.addEventListener('click', () => {
 // APARTMENTS: tampilkan hanya kubus
 apartmentsButton.addEventListener('click', () => {
   currentMode = 'apartments';
-  // 🚀 Mulai animasi reset kamera
-  resettingCamera = true;
-  resetStartTime = performance.now();
 
-  // ambil posisi terakhir kamera dan target saat ini
-  resetFrom.copy(camera.position.clone());
-  resetTo.copy(initialCameraPosition.clone());
+  // 🚀 Mulai animasi kamera ke posisi apartemen
+  cameraToNavbar = true;
+  navbarStartTime = performance.now();
 
-  resetTargetFrom.copy(controls.target.clone());
-  resetTargetTo.copy(initialControlsTarget.clone());
-  setPOIVisibility(false);
-  setCubesVisibility(true);
+  navbarFrom.copy(camera.position.clone());
+  navbarTargetFrom.copy(controls.target.clone());
+
+  // 🎯 Tentukan posisi & target yang kamu mau
+  navbarTo.set(1.75, 0.74, 0.11); // posisi kamera (ubah sesuai preferensi)
+  navbarTargetTo.set(0.4, 0.3, -0.4); // titik yang dilihat (ubah sesuai fokus)
+
   zooming = false;
   orbiting = false;
   orbitTarget = null;
+
+  setPOIVisibility(false);
+  setCubesVisibility(true);
+
   document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
   document.getElementById('filterbar').style.display = 'flex';
   document.getElementById('listpoi').style.display = 'none';
 });
 
+
 // AMENITIES: tampilkan hanya POI
 amenitiesButton.addEventListener('click', () => {
   currentMode = 'amenities';
-  // 🚀 Mulai animasi reset kamera
-  resettingCamera = true;
-  resetStartTime = performance.now();
+  // 🚀 Mulai animasi kamera ke posisi apartemen
+  cameraToNavbar = true;
+  navbarStartTime = performance.now();
 
-  // ambil posisi terakhir kamera dan target saat ini
-  resetFrom.copy(camera.position.clone());
-  resetTo.copy(initialCameraPosition.clone());
+  navbarFrom.copy(camera.position.clone());
+  navbarTargetFrom.copy(controls.target.clone());
 
-  resetTargetFrom.copy(controls.target.clone());
-  resetTargetTo.copy(initialControlsTarget.clone());
-  setPOIVisibility(true);
-  setCubesVisibility(false);
+  // 🎯 Tentukan posisi & target yang kamu mau
+  navbarTo.set(1.54, 1, -0.37); // posisi kamera (ubah sesuai preferensi)
+  navbarTargetTo.set(0.26, 0, -0.25); // titik yang dilihat (ubah sesuai fokus)
+
   zooming = false;
   orbiting = false;
   orbitTarget = null;
+
+  setPOIVisibility(true);
+  setCubesVisibility(false);
+
   document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
   document.getElementById('filterbar').style.display = 'none';
   document.getElementById('listpoi').style.display = 'flex';
@@ -540,6 +556,21 @@ function animate() {
   controls.update();
 
   if (t >= 1) resettingCamera = false;
+}
+
+// 🔄 Animasi ke area apartemen
+if (cameraToNavbar) {
+  const now = performance.now();
+  const linearT = Math.min(1, (now - navbarStartTime) / navbarDuration);
+  const t = linearT * linearT * (3 - 2 * linearT); // smoothstep
+
+  camera.position.lerpVectors(navbarFrom, navbarTo, t);
+  controls.target.lerpVectors(navbarTargetFrom, navbarTargetTo, t);
+  controls.update();
+
+  if (t >= 1) {
+    cameraToNavbar = false;
+  }
 }
 
   // Zooming logic

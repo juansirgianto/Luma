@@ -157,8 +157,7 @@ body {
 .listpoi{
   position: absolute;
   left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 10px;
   background: rgba(0, 0, 0, 0.7);
   padding: 10px;
   border-radius: 10px;
@@ -169,6 +168,8 @@ body {
   background: rgba(128, 128, 128, 0.6);
   color: white;
   padding: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   border-radius: 10px;
 }
 
