@@ -535,6 +535,79 @@ document.querySelectorAll('.close-description').forEach(btn => {
   });
 });
 
+// Modal Carousel
+// Data gambar untuk galeri (bisa diganti sesuai POI)
+const galleryMap = {
+  home: ['/hotel.jpg', '/hotel1.jpg'],
+  hotel: ['/hotel1.jpg', '/hotel.jpg', '/apart.jpg'],
+  shop: ['/apart1.jpg', '/apart.jpg'],
+
+  cube0: ['/apart1.jpg', '/apart.jpg'],
+  cube1: ['/apart.jpg', '/apart1.jpg'],
+  cube2: ['/apart.jpg', '/apart1.jpg'],
+  cube3: ['/apart1.jpg', '/apart.jpg'],
+};
+
+const modal = document.getElementById('carouselModal');
+const mainImage = document.getElementById('mainCarouselImage');
+const thumbnailsContainer = document.getElementById('carouselThumbnails');
+const closeBtn = document.getElementById('closeCarousel');
+
+// Event: buka modal saat tombol "Gallery" diklik
+document.querySelectorAll('.gallery').forEach(button => {
+  button.addEventListener('click', (e) => {
+    e.stopPropagation();
+
+    const id = button.getAttribute('data-gallery-id');
+    const images = galleryMap[id] || []; // fallback: []
+
+    if (images.length === 0) {
+      alert("Belum ada gambar galeri untuk POI ini.");
+      return;
+    }
+
+    document.getElementById('carouselModal').classList.remove('hidden');
+    updateCarouselImages(images);
+  });
+});
+
+// Event: tutup modal
+closeBtn.addEventListener('click', () => {
+  modal.classList.add('hidden');
+});
+
+function updateCarouselImages(images) {
+  const mainImage = document.getElementById('mainCarouselImage');
+  const thumbnailsContainer = document.getElementById('carouselThumbnails');
+
+  mainImage.src = images[0];
+  thumbnailsContainer.innerHTML = '';
+
+  images.forEach((img, idx) => {
+    const thumb = document.createElement('img');
+    thumb.src = img;
+    thumb.className = `h-20 cursor-pointer rounded border-2 ${idx === 0 ? 'border-blue-500' : 'border-transparent'}`;
+
+    thumb.addEventListener('click', () => {
+      mainImage.src = img;
+
+      // 🔄 Reset border semua thumbnail
+      thumbnailsContainer.querySelectorAll('img').forEach(el => {
+        el.classList.remove('border-blue-500');
+        el.classList.add('border-transparent');
+      });
+
+      // ✅ Beri border biru ke yang diklik
+      thumb.classList.remove('border-transparent');
+      thumb.classList.add('border-blue-500');
+    });
+
+    thumbnailsContainer.appendChild(thumb);
+  });
+
+  lucide.createIcons();
+}
+
 // 🔁 Animasi utama
 function animate() {
   requestAnimationFrame(animate);

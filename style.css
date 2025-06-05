@@ -177,3 +177,7 @@ body {
   background: white;
   color: black;
 }
+
+.carousel{
+  background: rgba(255, 255, 255, 0.6);
+}
