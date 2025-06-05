@@ -1,9 +1,12 @@
-console.log("✅ main.js loaded!");
 
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { LumaSplatsThree } from '@lumaai/luma-web';
-import { LumaSplatsSemantics } from "@lumaai/luma-web";
+// import * as THREE from 'three';
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+// import { LumaSplatsThree } from '@lumaai/luma-web';
+
+import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+import { LumaSplatsThree } from 'https://unpkg.com/@lumaai/luma-web@0.2.2/dist/luma-web.mjs';
+console.log("✅ main.js loaded!");
 
 // 🎯 Setup dasar
 const canvas = document.getElementById('webgl-canvas');
