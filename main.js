@@ -5,7 +5,7 @@
 
 import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
 import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
-import { LumaSplatsThree } from '@lumaai/luma-web';
+import { LumaSplatsThree } from './libs/luma-web.module.js';
 console.log("✅ main.js loaded!");
 
 // 🎯 Setup dasar
