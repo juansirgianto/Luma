@@ -4,8 +4,7 @@
 
 import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
 import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
-import { LumaSplatsThree } from 'https://unpkg.com/@lumaai/luma-web@0.2.2/dist/luma-web.module.js'; // jika tidak CORS error
-
+import { LumaSplatsThree } from './libs/luma-web.module.js';
 
 // 🎯 Setup dasar
 const canvas = document.getElementById('webgl-canvas');
