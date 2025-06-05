@@ -8,6 +8,16 @@
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/examples/jsm/controls/OrbitControls": "https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js",
+    "@lumaai/luma-web": "https://unpkg.com/@lumaai/luma-web/dist/luma-web.mjs"
+  }
+}
+</script>
 </head>
 <body>
   <canvas id="webgl-canvas"></canvas>
@@ -217,15 +227,7 @@
   </div>
 </div>
 
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-        "three/examples/jsm/controls/OrbitControls": "https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js",
-        "@lumaai/luma-web": "https://unpkg.com/@lumaai/luma-web/dist/luma-web.mjs"
-      }
-    }
-  </script>
+  
   
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>
