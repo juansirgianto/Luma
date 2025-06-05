@@ -181,3 +181,49 @@ body {
 .carousel{
   background: rgba(255, 255, 255, 0.6);
 }
+
+@media screen and (min-width: 390px) and (max-width: 964px) {
+  #navbar {
+    right: 50%;
+    transform: translateX(50%);
+    flex-direction: row;
+    gap: 6px;
+    padding: 8px;
+    font-size: 12px;
+    /* background-color: red; */
+  }
+  .filter {
+  position: absolute;
+  top: 70px;
+  left: 50vw;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 30px;
+  align-items: center;
+  padding: 10px;
+  font-size: small;
+}
+.description-box {
+  position: absolute;
+  top: 50vh;
+  left: 50vw;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 8px;
+  height: auto;
+  width: 400px;
+}
+#carouselModal{
+  z-index: 999;
+}
+.carousel{
+  background-color: white;
+}
+.listpoi{
+  font-size: small;
+  top: 50vh;
+  transform: translateY(-50%);
+}
+}

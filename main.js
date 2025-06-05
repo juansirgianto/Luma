@@ -97,7 +97,7 @@ document.getElementById('listhotel').addEventListener('click', () => {
 });
 document.getElementById('listshops').addEventListener('click', () => {
   document.getElementById('shopPOIButton').click();
-});
+})
 
 // 🧭 Setup POI tombol & posisi
 POIs.forEach(poi => {
@@ -464,7 +464,7 @@ amenitiesButton.addEventListener('click', () => {
   navbarTargetFrom.copy(controls.target.clone());
 
   // 🎯 Tentukan posisi & target yang kamu mau
-  navbarTo.set(1.54, 1, -0.37); // posisi kamera (ubah sesuai preferensi)
+  navbarTo.set(2.6, 2, -0.37); // posisi kamera (ubah sesuai preferensi)
   navbarTargetTo.set(0.26, 0, -0.25); // titik yang dilihat (ubah sesuai fokus)
 
   zooming = false;
