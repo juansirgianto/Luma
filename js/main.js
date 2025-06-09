@@ -162,54 +162,54 @@ function startZoomAndOrbit(poi) {
 
 
 // 🔺 Buat geometry, material, dan mesh
-const cubeGeometry = new THREE.BoxGeometry(0.25, 0.35, 0.28); // Ukuran X, Y, Z
+const cubeGeometry = new THREE.BoxGeometry(0.25, 0.25, 0.28); // Ukuran X, Y, Z
 const cubeMaterial = new THREE.MeshBasicMaterial({
   color: 0xff0000,
   transparent: true,
   opacity: 0.2
 });
 const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-cube.position.set(0.26, 0, 0.08); // X, Y, Z
+cube.position.set(0.26, 0.05, 0.08); // X, Y, Z
 // contoh:
 cube.rotation.set(0, Math.PI / 3.3, 0); // rotasi 45 derajat di sumbu Y
 scene.add(cube);
 cube.userData.status = 'sold';
 
 // 🔺 Buat geometry, material, dan mesh
-const cubeGeometry1 = new THREE.BoxGeometry(0.25, 0.35, 0.28); // Ukuran X, Y, Z
+const cubeGeometry1 = new THREE.BoxGeometry(0.25, 0.25, 0.28); // Ukuran X, Y, Z
 const cubeMaterial1 = new THREE.MeshBasicMaterial({
   color: 0x0000ff,
   transparent: true,
   opacity: 0.2
 });
 const cube1 = new THREE.Mesh(cubeGeometry1, cubeMaterial1);
-cube1.position.set(0.33, 0, -0.19); // X, Y, Z
+cube1.position.set(0.33, 0.05, -0.19); // X, Y, Z
 cube1.rotation.set(0, Math.PI / 3.3, 0); // rotasi 45 derajat di sumbu Y
 scene.add(cube1);
 cube1.userData.status = 'available';
 
 // 🔺 Buat geometry, material, dan mesh
-const cubeGeometry2 = new THREE.BoxGeometry(0.25, 0.35, 0.28); // Ukuran X, Y, Z
+const cubeGeometry2 = new THREE.BoxGeometry(0.25, 0.25, 0.28); // Ukuran X, Y, Z
 const cubeMaterial2 = new THREE.MeshBasicMaterial({
   color: 0xffff00,
   transparent: true,
   opacity: 0.2
 });
 const cube2 = new THREE.Mesh(cubeGeometry2, cubeMaterial2);
-cube2.position.set(0.38, 0, -0.50); // X, Y, Z
+cube2.position.set(0.38, 0.05, -0.50); // X, Y, Z
 cube2.rotation.set(0, Math.PI / 3.3, 0); // rotasi 45 derajat di sumbu Y
 scene.add(cube2);
 cube2.userData.status = 'booked';
 
 // 🔺 Buat geometry, material, dan mesh
-const cubeGeometry3 = new THREE.BoxGeometry(0.25, 0.35, 0.28); // Ukuran X, Y, Z
+const cubeGeometry3 = new THREE.BoxGeometry(0.25, 0.25, 0.28); // Ukuran X, Y, Z
 const cubeMaterial3 = new THREE.MeshBasicMaterial({
   color: 0x0000ff,
   transparent: true,
   opacity: 0.2
 });
 const cube3 = new THREE.Mesh(cubeGeometry3, cubeMaterial3);
-cube3.position.set(0.52, 0, -0.74); // X, Y, Z
+cube3.position.set(0.52, 0.05, -0.74); // X, Y, Z
 cube3.rotation.set(0, Math.PI / 3.3, 0); // rotasi 45 derajat di sumbu Y
 scene.add(cube3);
 cube3.userData.status = 'available';
@@ -337,49 +337,43 @@ canvas.addEventListener('mousemove', (event) => {
 
   raycaster.setFromCamera(mouse, camera);
   const visibleCubes = cubes.filter(c => c.visible);
-const intersects = raycaster.intersectObjects(visibleCubes);
+  const intersects = raycaster.intersectObjects(visibleCubes);
+
+  const tooltip = document.getElementById('tooltip');
 
   if (currentMode !== 'apartments') {
     canvas.style.cursor = 'default';
-    if (hoveredCube) {
-      hoveredCube.material.color.copy(hoveredCube.userData.originalColor);
-      hoveredCube = null;
-    }
-    return;
-  }
-
-   if (currentMode === 'home') {
-    canvas.style.cursor = 'default';
+    tooltip.style.display = 'none';
     return;
   }
 
   if (intersects.length > 0) {
     const cube = intersects[0].object;
 
+    // Highlight cube
     if (hoveredCube !== cube) {
-      if (hoveredCube) {
-        hoveredCube.material.color.copy(hoveredCube.userData.originalColor || hoveredCube.material.color);
-      }
-
+      if (hoveredCube) hoveredCube.material.color.copy(hoveredCube.userData.originalColor);
       hoveredCube = cube;
-
-      if (!cube.userData.originalColor) {
-        cube.userData.originalColor = cube.material.color.clone();
-      }
-
+      if (!cube.userData.originalColor) cube.userData.originalColor = cube.material.color.clone();
       cube.material.color.set(0x00bfff);
     }
 
-    canvas.style.cursor = 'pointer'; // Bonus: ubah cursor
-  } else {
-    if (hoveredCube) {
-      hoveredCube.material.color.copy(hoveredCube.userData.originalColor);
-      hoveredCube = null;
-    }
+    // ✅ Tampilkan tooltip
+    tooltip.style.left = event.clientX + 10 + 'px';
+    tooltip.style.top = event.clientY + 10 + 'px';
+    tooltip.innerText = cube.userData.status || 'Info tidak tersedia';
+    tooltip.style.display = 'block';
 
+    canvas.style.cursor = 'pointer';
+  } else {
+    if (hoveredCube) hoveredCube.material.color.copy(hoveredCube.userData.originalColor);
+    hoveredCube = null;
+
+    tooltip.style.display = 'none';
     canvas.style.cursor = 'default';
   }
 });
+
 
 // Fungsi: atur visibilitas POI (tombol & deskripsi)
 function setPOIVisibility(visible) {
@@ -756,6 +750,11 @@ window.addEventListener('wheel', () => {
   orbiting = false;
   zooming = false;
   resettingCamera = false;
+  cameraToNavbar = false;
   resetIdleTimer();
   startOrbitAfterDelay(); // mulai ulang hitung idle 5 detik
+});
+
+canvas.addEventListener('mouseleave', () => {
+  tooltip.style.display = 'none';
 });

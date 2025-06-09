@@ -76,6 +76,7 @@ body {
   height: auto;
   max-width: 300px;
   z-index: 999;
+  backdrop-filter: blur(5px);
 }
 
 .close-description{
@@ -204,6 +205,7 @@ body {
 
 .carousel{
   background: var(--primary-transparant);
+  backdrop-filter: blur(5px);
   border-radius: 25px;
 }
 
