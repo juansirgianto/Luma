@@ -4,6 +4,12 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
+:root{
+  --primary: #2e3047;
+  --secondary: #daddd8;
+  --third: #f5f4ea;
+}
+
 .poi-button {
   position: absolute;  
   top: 20px;
@@ -56,7 +62,7 @@ body {
   position: absolute;
   top: 10px;
   right: 20px;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--primary);
   color: white;
   border-radius: 8px;
   height: auto;
@@ -88,7 +94,7 @@ body {
   top: 10px;
   transform: translateX(50%);
   right: 50%; 
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--primary);
   font-size: 13px;
   padding: 10px;
   border-radius: 25px;
@@ -107,15 +113,15 @@ body {
 }
 
 #navbar button.active{
-  background-color: rgba(128, 128, 128, 0.6) !important;
-  color: white;
+  background-color: var(--secondary) !important;
+  color: var(--primary);
 }
 
 #navbar button:hover{
   padding: 10px;
   border-radius: 10px;
-  color: white;
-  background-color: rgba(128, 128, 128, 0.6) !important;
+  color: var(--primary);
+  background-color: var(--secondary) !important;
   border: none;
   font-weight: 600;
   cursor: pointer;
@@ -126,18 +132,24 @@ body {
   cursor: pointer;
   border-radius: 8px;
   margin: 12px;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
+  background-color: var(--secondary);
+  color: var(--primary);
   padding: 10px;
   z-index: 999;
+  font-weight: 600;
   width: 100%;
+}
+
+.gallery:hover{
+  background-color: var(--third);
+  color: var(--primary);
 }
 
 .filter {
   position: absolute;
   top: 10px;
   left: 20px;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--primary);
   color: white;
   border-radius: 30px;
   align-items: center;
@@ -158,19 +170,20 @@ body {
   position: absolute;
   left: 10px;
   top: 10px;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--primary);
   padding: 10px;
   border-radius: 10px;
   color: white;
 }
 
 .listpoi button{
-  background: rgba(128, 128, 128, 0.6);
-  color: white;
+  background: var(--secondary);
+  color: var(--primary);
   padding: 10px;
   padding-top: 5px;
   padding-bottom: 5px;
   border-radius: 10px;
+  font-weight: 600
 }
 
 .listpoi button:hover{
@@ -179,7 +192,7 @@ body {
 }
 
 .carousel{
-  background: rgba(255, 255, 255, 0.6);
+  background: rgb(218, 221, 216, 0.7);
 }
 
 @media screen and (min-width: 390px) and (max-width: 964px) {
@@ -197,7 +210,7 @@ body {
   top: 70px;
   left: 50vw;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--primary);
   color: white;
   border-radius: 30px;
   align-items: center;
