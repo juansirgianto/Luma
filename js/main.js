@@ -568,7 +568,7 @@ const galleryMap = {
   hotel: ['./hotel1.jpg', './hotel.jpg', './apart.jpg'],
   shop: ['./apart1.jpg', './apart.jpg'],
 
-  cube0: ['./apart1.jpg', './apart.jpg'],
+  cube0: ['./hotel1.jpg', './apart.jpg'],
   cube1: ['./apart.jpg', './apart1.jpg'],
   cube2: ['./apart.jpg', './apart1.jpg'],
   cube3: ['./apart1.jpg', './apart.jpg'],
