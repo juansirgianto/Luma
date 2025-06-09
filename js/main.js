@@ -307,8 +307,8 @@ Camera Rotation:
 }
 
 // axis helper
-const axesHelper = new THREE.AxesHelper( 5 );
-scene.add( axesHelper );
+// const axesHelper = new THREE.AxesHelper( 5 );
+// scene.add( axesHelper );
 
 // navbar active
 const navbarButtons = document.querySelectorAll('#navbar button');
