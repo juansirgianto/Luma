@@ -166,7 +166,7 @@ const cubeGeometry = new THREE.BoxGeometry(0.25, 0.35, 0.28); // Ukuran X, Y, Z
 const cubeMaterial = new THREE.MeshBasicMaterial({
   color: 0xff0000,
   transparent: true,
-  opacity: 0.5
+  opacity: 0.2
 });
 const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 cube.position.set(0.26, 0, 0.08); // X, Y, Z
@@ -180,7 +180,7 @@ const cubeGeometry1 = new THREE.BoxGeometry(0.25, 0.35, 0.28); // Ukuran X, Y, Z
 const cubeMaterial1 = new THREE.MeshBasicMaterial({
   color: 0x0000ff,
   transparent: true,
-  opacity: 0.5
+  opacity: 0.2
 });
 const cube1 = new THREE.Mesh(cubeGeometry1, cubeMaterial1);
 cube1.position.set(0.33, 0, -0.19); // X, Y, Z
@@ -193,7 +193,7 @@ const cubeGeometry2 = new THREE.BoxGeometry(0.25, 0.35, 0.28); // Ukuran X, Y, Z
 const cubeMaterial2 = new THREE.MeshBasicMaterial({
   color: 0xffff00,
   transparent: true,
-  opacity: 0.5
+  opacity: 0.2
 });
 const cube2 = new THREE.Mesh(cubeGeometry2, cubeMaterial2);
 cube2.position.set(0.38, 0, -0.50); // X, Y, Z
@@ -206,7 +206,7 @@ const cubeGeometry3 = new THREE.BoxGeometry(0.25, 0.35, 0.28); // Ukuran X, Y, Z
 const cubeMaterial3 = new THREE.MeshBasicMaterial({
   color: 0x0000ff,
   transparent: true,
-  opacity: 0.5
+  opacity: 0.2
 });
 const cube3 = new THREE.Mesh(cubeGeometry3, cubeMaterial3);
 cube3.position.set(0.52, 0, -0.74); // X, Y, Z
