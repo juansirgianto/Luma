@@ -2,6 +2,7 @@ body {
   margin: 0;
   overflow: hidden;
   font-family: 'Jost', sans-serif;
+  /* font-family: 'Roboto', sans-serif; */
   /* font-family: 'Poppins', sans-serif; */
 }
 
@@ -59,11 +60,20 @@ body {
   font-size: 14px;
   font-weight: 500;
   z-index: 10;
+  display: flex !important;
+  gap: 5px;
 }
 
 .poi-html-button:hover{
   background-color: var(--secondary);
   color: var(--primary);
+}
+
+.iconpoi{
+  background-color: var(--secondary);
+  color: var(--primary);
+  border-radius: 25px;
+  padding: 2px;
 }
 
 .description-box {
@@ -221,6 +231,18 @@ body {
   margin: 12px;
   font-weight: 600;
   font-size: x-large;
+}
+
+.tooltip{
+  position: absolute;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+  display: none;
+  z-index: 9999;
 }
 
 @media screen and (min-width: 390px) and (max-width: 964px) {

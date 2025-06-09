@@ -6,6 +6,7 @@
   <style>body { margin: 0; overflow: hidden; }</style>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,7 +31,10 @@
 </nav>
 
 <!-- Home button -->
-<button id="homePOIButton" class="poi-html-button">HOME</button>
+<button id="homePOIButton" class="poi-html-button">
+  <i data-lucide="home" class="iconpoi my-auto size-5 justify-between"></i>
+  <span>HOME</span>
+</button>
 <div id="homedescription" class="description-box" style="display: none;">
   <button class="close-description">
     <i data-lucide="x"></i>
@@ -51,7 +55,10 @@
 </div>
 
 <!-- Hotel button -->
-<button id="hotelPOIButton" class="poi-html-button">HOTEL</button>
+<button id="hotelPOIButton" class="poi-html-button">
+  <i data-lucide="hotel" class="iconpoi my-auto size-5 justify-between"></i>
+  <span>HOTEL</span>
+</button>
 <div id="hoteldescription" class="description-box" style="display: none;">
   <button class="close-description">
     <i data-lucide="x"></i>
@@ -72,7 +79,10 @@
 </div>
 
 <!-- Shop button -->
-<button id="shopPOIButton" class="poi-html-button">SHOPS</button>
+<button id="shopPOIButton" class="poi-html-button">
+  <i data-lucide="shopping-basket" class="iconpoi my-auto size-5 justify-between"></i>
+  <span>SHOPS</span>
+</button>
 <div id="shopdescription" class="description-box" style="display: none;">
   <button class="close-description">
     <i data-lucide="x"></i>
@@ -208,7 +218,7 @@
 
     <!-- Main Image -->
     <div class="flex justify-center mb-4">
-      <img id="mainCarouselImage" src="./hotel.jpg" alt="Main" class="h-[400px] object-contain rounded-lg" />
+      <img id="mainCarouselImage" alt="Main" class="h-[400px] object-contain rounded-lg" />
     </div>
 
     <!-- Thumbnails -->
@@ -220,17 +230,7 @@
   </div>
 </div>
 
-<div id="tooltip" style="
-  position: absolute;
-  background: rgba(0,0,0,0.7);
-  color: white;
-  padding: 6px 10px;
-  border-radius: 4px;
-  font-size: 12px;
-  pointer-events: none;
-  display: none;
-  z-index: 9999;
-"></div> 
+<div id="tooltip" class="tooltip"></div> 
   
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>
