@@ -1,10 +1,10 @@
-// import * as THREE from 'three';
-// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-// import { LumaSplatsThree } from '@lumaai/luma-web';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { LumaSplatsThree } from '@lumaai/luma-web';
 
-import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
-import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
-import { LumaSplatsThree } from 'https://unpkg.com/@lumaai/luma-web@0.2.2/dist/library/luma-web.module.js'; // jika tidak CORS error
+// import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+// import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+// import { LumaSplatsThree } from 'https://unpkg.com/@lumaai/luma-web@0.2.2/dist/library/luma-web.module.js'; // jika tidak CORS error
 
 
 // 🎯 Setup dasar
