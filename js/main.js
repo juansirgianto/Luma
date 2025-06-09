@@ -564,14 +564,14 @@ document.querySelectorAll('.close-description').forEach(btn => {
 // Modal Carousel
 // Data gambar untuk galeri (bisa diganti sesuai POI)
 const galleryMap = {
-  home: ['/hotel.jpg', '/hotel1.jpg'],
-  hotel: ['/hotel1.jpg', '/hotel.jpg', '/apart.jpg'],
-  shop: ['/apart1.jpg', '/apart.jpg'],
+  home: ['./hotel.jpg', './hotel1.jpg'],
+  hotel: ['./hotel1.jpg', './hotel.jpg', './apart.jpg'],
+  shop: ['./apart1.jpg', './apart.jpg'],
 
-  cube0: ['/apart1.jpg', '/apart.jpg'],
-  cube1: ['/apart.jpg', '/apart1.jpg'],
-  cube2: ['/apart.jpg', '/apart1.jpg'],
-  cube3: ['/apart1.jpg', '/apart.jpg'],
+  cube0: ['./apart1.jpg', './apart.jpg'],
+  cube1: ['./apart.jpg', './apart1.jpg'],
+  cube2: ['./apart.jpg', './apart1.jpg'],
+  cube3: ['./apart1.jpg', './apart.jpg'],
 };
 
 const modal = document.getElementById('carouselModal');
