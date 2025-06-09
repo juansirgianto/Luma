@@ -5,6 +5,7 @@
   <title>Luma AI + Three.js</title>
   <style>body { margin: 0; overflow: hidden; }</style>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +16,7 @@
 
 <!-- Statistik Kamera -->
 <div id="statsBox" class="camera-stats"></div>
+
 <nav id="navbar">
   <button class="active">
     Home
@@ -33,9 +35,9 @@
   <button class="close-description">
     <i data-lucide="x"></i>
   </button>
-  <img src="./hotel.jpg" alt="" style="width: 300px; height: 300px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-  <h4 style="margin: 12px;">Home</h4>
-  <p style="margin: 12px;">Ini adalah area utama rumah atau ruangan utama.</p>
+  <img src="./hotel.jpg" alt="" class="desc-image">
+  <h4 style="margin: 12px; font-size:x-large; font-weight: 600;">Home</h4>
+  <p style="margin: 12px;">Ini adalah area utama rumah atau ruangan utama. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum expedita debitis nemo rerum, est velit nobis dolorum sunt. Beatae nostrum alias ab dolorem, numquam dolorum sapiente blanditiis ipsum deserunt enim.</p>
   <div class="flex justify-between">
     <button class="gallery flex gap-2 text-align-center" data-gallery-id="home">
        <i data-lucide="image"></i>
@@ -54,9 +56,9 @@
   <button class="close-description">
     <i data-lucide="x"></i>
   </button>
-  <img src="./hotel1.jpg" alt="" style="width: 300px; height: 300px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-  <h4 style="margin: 12px;"> Hotel</h4>
-  <p style="margin: 12px;">Ini adalah area perhotelan.</p>
+  <img src="./hotel1.jpg" alt="" class="desc-image">
+  <h4 style="margin: 12px; font-size:x-large; font-weight: 600;"> Hotel</h4>
+  <p style="margin: 12px;">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Adipisci possimus, quo itaque reiciendis expedita natus nobis laborum vero, officiis temporibus quibusdam facilis voluptates incidunt? Perspiciatis est autem qui earum veritatis?</p>
   <div class="flex justify-between">
     <button class="gallery flex gap-2 text-align-center" data-gallery-id="hotel">
        <i data-lucide="image"></i>
@@ -75,9 +77,9 @@
   <button class="close-description">
     <i data-lucide="x"></i>
   </button>
-  <img src="./apart1.jpg" alt="" style="width: 300px; height: 300px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-  <h4 style="margin: 12px;"> Shops</h4>
-  <p style="margin: 12px;">Ini adalah area perbelanjaan.</p>
+  <img src="./apart1.jpg" alt="" class="desc-image">
+  <h4 style="margin: 12px; font-size:x-large; font-weight: 600;"> Shops</h4>
+  <p style="margin: 12px;">Ini adalah area perbelanjaan. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut voluptatem accusamus incidunt qui, minima culpa eveniet dicta, quaerat totam officiis, nihil voluptatibus facilis? Voluptatum, totam et blanditiis ipsa ducimus voluptatibus.</p>
   <div class="flex justify-between">
     <button class="gallery flex gap-2 text-align-center" data-gallery-id="shop">
        <i data-lucide="image"></i>
@@ -95,9 +97,9 @@
   <button class="close-description">
     <i data-lucide="x" class="size-5"></i>
   </button>
-  <img src="./hotel1.jpg" alt="" style="width: 300px; height: 300px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-  <h4 style="margin: 12px;">Apartment Unit A</h4>
-  <p style="margin: 12px;">Ini adalah unit apartemen yang tersedia.</p>
+  <img src="./hotel1.jpg" alt="" class="desc-image">
+  <h4 style="margin: 12px; font-size:x-large; font-weight: 600;">Apartment Unit A</h4>
+  <p style="margin: 12px;">Ini adalah unit apartemen yang tersedia. Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi aliquam earum voluptatem laboriosam ducimus fugiat enim, autem facere, quisquam voluptatum quaerat numquam sit, nemo dignissimos aperiam obcaecati deserunt neque reprehenderit.</p>
   <div class="flex justify-between">
     <button class="gallery flex gap-2 text-align-center" data-gallery-id="cube0">
        <i data-lucide="image"></i>
@@ -114,9 +116,9 @@
   <button class="close-description">
     <i data-lucide="x"></i>
   </button>
-  <img src="./apart.jpg" alt="" style="width: 300px; height: 300px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-  <h4 style="margin: 12px;">Apartment Unit B</h4>
-  <p style="margin: 12px;">Ini adalah unit apartemen yang tersedia.</p>
+  <img src="./apart.jpg" alt="" class="desc-image">
+  <h4 style="margin: 12px; font-size:x-large; font-weight: 600;">Apartment Unit B</h4>
+  <p style="margin: 12px;">Ini adalah unit apartemen yang tersedia. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequuntur eligendi nesciunt autem ipsa suscipit nulla dolores soluta consectetur nam ipsum ipsam, minima quaerat. Accusamus repudiandae facilis suscipit nobis laudantium voluptate?</p>
   <div class="flex justify-between">
     <button class="gallery flex gap-2 text-align-center" data-gallery-id="cube1">
        <i data-lucide="image"></i>
@@ -134,9 +136,9 @@
   <button class="close-description">
     <i data-lucide="x"></i>
   </button>
-  <img src="./apart.jpg" alt="" style="width: 300px; height: 300px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-  <h4 style="margin: 12px;">Apartment Unit C</h4>
-  <p style="margin: 12px;">Ini adalah unit apartemen yang tersedia.</p>
+  <img src="./apart.jpg" alt="" class="desc-image">
+  <h4 style="margin: 12px; font-size:x-large; font-weight: 600;">Apartment Unit C</h4>
+  <p style="margin: 12px;">Ini adalah unit apartemen yang tersedia. Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe placeat perferendis sed autem voluptatem aut sint, reiciendis tenetur quos ipsam reprehenderit dolorum laudantium accusantium earum! Rerum sed unde officia quos?</p>
   <div class="flex justify-between">
     <button class="gallery flex gap-2 text-align-center" data-gallery-id="cube2">
        <i data-lucide="image"></i>
@@ -154,9 +156,9 @@
   <button class="close-description">
     <i data-lucide="x"></i>
   </button>
-  <img src="./apart1.jpg" alt="" style="width: 300px; height: 300px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-  <h4 style="margin: 12px;">Apartment Unit D</h4>
-  <p style="margin: 12px;">Ini adalah unit apartemen yang tersedia.</p>
+  <img src="./apart1.jpg" alt="" class="desc-image">
+  <h4 style="margin: 12px; font-size:x-large; font-weight: 600;">Apartment Unit D</h4>
+  <p style="margin: 12px;">Ini adalah unit apartemen yang tersedia. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Error quam quos aut ab ducimus. Nobis provident dolorum harum magnam numquam praesentium veritatis suscipit sunt facilis? Odit maiores ipsum minima pariatur.</p>
   <div class="flex justify-between">
     <button class="gallery flex gap-2 text-align-center" data-gallery-id="cube3">
        <i data-lucide="image"></i>
@@ -199,7 +201,7 @@
 
   <!-- Carousel Modal with Preview -->
 <div id="carouselModal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
-  <div class="carousel rounded-lg p-4 w-[700px] max-w-[90%] max-h-[90%] overflow-hidden relative">
+  <div class="carousel p-4 w-[700px] max-w-[90%] max-h-[90%] overflow-hidden relative">
     <button id="closeCarousel" class="close-description">
       <i data-lucide="x"></i>
     </button>
