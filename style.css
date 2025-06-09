@@ -2,11 +2,12 @@ body {
   margin: 0;
   overflow: hidden;
   font-family: 'Jost', sans-serif;
+  /* font-family: 'Poppins', sans-serif; */
 }
 
 :root{
   --primary: #2e3047;
-  --primary-transparant: rgba(46, 48, 71, 0.9);
+  --primary-transparant: rgba(46, 48, 71, 0.95);
   --secondary: #daddd8;
   --third: #f5f4ea;
 }
@@ -197,8 +198,8 @@ body {
 }
 
 .listpoi button:hover{
-  background: white;
-  color: black;
+  background: var(--third);
+  color: var(--primary);
 }
 
 .carousel{
@@ -216,7 +217,6 @@ body {
 
 .desc-text{
   margin: 12px;
-  margin-top: 0px;
   font-weight: 600;
   font-size: x-large;
 }
