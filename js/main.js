@@ -594,11 +594,32 @@ closeBtn.addEventListener('click', () => {
   modal.classList.add('hidden');
 });
 
+let currentCarouselImages = [];
+let currentImageIndex = 0;
+
+function updateMainImage(index) {
+    currentImageIndex = index;
+    mainImage.src = currentCarouselImages[index];
+
+    // Highlight thumbnail aktif
+    const allThumbnails = thumbnailsContainer.querySelectorAll('img');
+    allThumbnails.forEach((thumb, idx) => {
+      if (idx === index) {
+        thumb.classList.add('border-blue-500');
+        thumb.classList.remove('border-transparent');
+      } else {
+        thumb.classList.remove('border-blue-500');
+        thumb.classList.add('border-transparent');
+      }
+    });
+  }
+
 function updateCarouselImages(images) {
   const mainImage = document.getElementById('mainCarouselImage');
   const thumbnailsContainer = document.getElementById('carouselThumbnails');
 
-  mainImage.src = images[0];
+  currentCarouselImages = images;
+  currentImageIndex = 0; // mulai dari gambar pertama
   thumbnailsContainer.innerHTML = '';
 
   images.forEach((img, idx) => {
@@ -606,25 +627,24 @@ function updateCarouselImages(images) {
     thumb.src = img;
     thumb.className = `h-20 cursor-pointer rounded border-2 ${idx === 0 ? 'border-blue-500' : 'border-transparent'}`;
 
-    thumb.addEventListener('click', () => {
-      mainImage.src = img;
-
-      // 🔄 Reset border semua thumbnail
-      thumbnailsContainer.querySelectorAll('img').forEach(el => {
-        el.classList.remove('border-blue-500');
-        el.classList.add('border-transparent');
-      });
-
-      // ✅ Beri border biru ke yang diklik
-      thumb.classList.remove('border-transparent');
-      thumb.classList.add('border-blue-500');
-    });
+    thumb.addEventListener('click', () => updateMainImage(idx));
 
     thumbnailsContainer.appendChild(thumb);
   });
 
+  updateMainImage(0); // set gambar utama pertama kali
   lucide.createIcons();
 }
+
+document.getElementById('prevImage').addEventListener('click', () => {
+  const newIndex = (currentImageIndex - 1 + currentCarouselImages.length) % currentCarouselImages.length;
+  updateMainImage(newIndex);
+});
+
+document.getElementById('nextImage').addEventListener('click', () => {
+  const newIndex = (currentImageIndex + 1) % currentCarouselImages.length;
+  updateMainImage(newIndex);
+});
 
 // 🔁 Animasi utama
 function animate() {

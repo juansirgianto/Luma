@@ -216,10 +216,22 @@
       <i data-lucide="x"></i>
     </button>
 
-    <!-- Main Image -->
-    <div class="flex justify-center mb-4">
-      <img id="mainCarouselImage" alt="Main" class="h-[400px] object-contain rounded-lg" />
-    </div>
+    <!-- Carousel Container -->
+<div class="relative flex justify-center items-center mb-4">
+  <!-- Kiri (prev) -->
+  <button id="prevImage" class="arrow absolute left-2 z-10 rounded-full p-2">
+    <i data-lucide="chevron-left" class="m-auto"></i>
+  </button>
+
+  <!-- Gambar Utama -->
+  <img id="mainCarouselImage" alt="Main" class="h-[400px] object-cover w-[550px] rounded-lg" />
+
+  <!-- Kanan (next) -->
+  <button id="nextImage" class="arrow absolute right-2 z-10 rounded-full p-2 ">
+    <i data-lucide="chevron-right"></i>
+  </button>
+</div>
+
 
     <!-- Thumbnails -->
     <div id="carouselThumbnails" class="flex gap-2 overflow-x-auto justify-center">

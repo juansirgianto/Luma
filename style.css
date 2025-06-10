@@ -102,11 +102,22 @@ body {
   color: white;
   padding-left: 3px;
   padding-right: 3px;
+  z-index: 20;
 }
 
 .close-description:hover{
   background-color: rgba(128, 128, 128, 0.6);
   color: white;
+}
+
+.arrow{
+  background-color: rgba(0, 0, 0, 0.5);
+  color: var(--third);
+}
+
+.arrow:hover{
+  background-color: var(--third);
+  color: black;
 }
 
 #navbar {
