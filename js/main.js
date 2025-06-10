@@ -380,7 +380,7 @@ function setPOIVisibility(visible) {
   POIs.forEach(poi => {
     const btn = document.getElementById(poi.buttonId);
     const desc = document.getElementById(poi.descriptionId);
-    btn.style.display = visible ? 'block' : 'none';
+    btn.style.display = visible ? 'flex' : 'none';
     desc.style.display = 'none';
   });
 }
