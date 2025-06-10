@@ -74,7 +74,7 @@ body {
   background-color: var(--secondary);
   color: var(--primary);
   border-radius: 25px;
-  padding: 2px;
+  padding: 5px;
 }
 
 .description-box {
