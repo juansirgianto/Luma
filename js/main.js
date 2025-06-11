@@ -1,6 +1,9 @@
 import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
 import { OrbitControls } from 'https://esm.run/three@0.160.0/examples/jsm/controls/OrbitControls.js';
 import { LumaSplatsThree } from '../libs/luma-web.module.js';
+import { POIs } from './pois.js';
+import { createCubes } from './cubes.js';
+import { setupGallery } from './gallery.js';
 
 // 🎯 Setup dasar
 const canvas = document.getElementById('webgl-canvas');
@@ -9,6 +12,8 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio, 2);
 
 const scene = new THREE.Scene();
+const { cubes, cubePOIs } = createCubes(scene);
+const hiddenStatuses = new Set(); 
 // scene.background = new THREE.Color(0x000000); // hitam
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
 camera.position.set(2.20, 1.66, -0.90);
@@ -64,28 +69,6 @@ const navbarFrom = new THREE.Vector3();
 const navbarTo = new THREE.Vector3();
 const navbarTargetFrom = new THREE.Vector3();
 const navbarTargetTo = new THREE.Vector3();
-
-// 📦 POI Data
-const POIs = [
-  {
-    id: 'home',
-    position: new THREE.Vector3(-0.32, 0, 0.50),
-    buttonId: 'homePOIButton',
-    descriptionId: 'homedescription'
-  },
-  {
-    id: 'hotel',
-    position: new THREE.Vector3(-0.20, 0, -0.90),
-    buttonId: 'hotelPOIButton',
-    descriptionId: 'hoteldescription'
-  },
-  {
-    id: 'shop',
-    position: new THREE.Vector3(0.58, 0, -0.32),
-    buttonId: 'shopPOIButton',
-    descriptionId: 'shopdescription'
-  }
-];
 
 // Button List POI
 document.getElementById('listhome').addEventListener('click', () => {
@@ -159,90 +142,6 @@ function startZoomAndOrbit(poi) {
   orbiting = false;
   startOrbitAfterDelay(poi);
 }
-
-
-// 🔺 Buat geometry, material, dan mesh
-const cubeGeometry = new THREE.BoxGeometry(0.25, 0.25, 0.28); // Ukuran X, Y, Z
-const cubeMaterial = new THREE.MeshBasicMaterial({
-  color: 0xff0000,
-  transparent: true,
-  opacity: 0.2
-});
-const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-cube.position.set(0.26, 0.05, 0.08); // X, Y, Z
-// contoh:
-cube.rotation.set(0, Math.PI / 3.3, 0); // rotasi 45 derajat di sumbu Y
-scene.add(cube);
-cube.userData.status = 'sold';
-
-// 🔺 Buat geometry, material, dan mesh
-const cubeGeometry1 = new THREE.BoxGeometry(0.25, 0.25, 0.28); // Ukuran X, Y, Z
-const cubeMaterial1 = new THREE.MeshBasicMaterial({
-  color: 0x0000ff,
-  transparent: true,
-  opacity: 0.2
-});
-const cube1 = new THREE.Mesh(cubeGeometry1, cubeMaterial1);
-cube1.position.set(0.33, 0.05, -0.19); // X, Y, Z
-cube1.rotation.set(0, Math.PI / 3.3, 0); // rotasi 45 derajat di sumbu Y
-scene.add(cube1);
-cube1.userData.status = 'available';
-
-// 🔺 Buat geometry, material, dan mesh
-const cubeGeometry2 = new THREE.BoxGeometry(0.25, 0.25, 0.28); // Ukuran X, Y, Z
-const cubeMaterial2 = new THREE.MeshBasicMaterial({
-  color: 0xffff00,
-  transparent: true,
-  opacity: 0.2
-});
-const cube2 = new THREE.Mesh(cubeGeometry2, cubeMaterial2);
-cube2.position.set(0.38, 0.05, -0.50); // X, Y, Z
-cube2.rotation.set(0, Math.PI / 3.3, 0); // rotasi 45 derajat di sumbu Y
-scene.add(cube2);
-cube2.userData.status = 'booked';
-
-// 🔺 Buat geometry, material, dan mesh
-const cubeGeometry3 = new THREE.BoxGeometry(0.25, 0.25, 0.28); // Ukuran X, Y, Z
-const cubeMaterial3 = new THREE.MeshBasicMaterial({
-  color: 0x0000ff,
-  transparent: true,
-  opacity: 0.2
-});
-const cube3 = new THREE.Mesh(cubeGeometry3, cubeMaterial3);
-cube3.position.set(0.52, 0.05, -0.74); // X, Y, Z
-cube3.rotation.set(0, Math.PI / 3.3, 0); // rotasi 45 derajat di sumbu Y
-scene.add(cube3);
-cube3.userData.status = 'available';
-
-const cubePOIs = [
-  {
-    id: 'cube0',
-    mesh: cube,
-    position: cube.position,
-    descriptionId: 'cubedescription'
-  },
-  {
-    id: 'cube1',
-    mesh: cube1,
-    position: cube1.position,
-    descriptionId: 'cubedescription1'
-  },
-  {
-    id: 'cube2',
-    mesh: cube2,
-    position: cube2.position,
-    descriptionId: 'cubedescription2'
-  },
-  {
-    id: 'cube3',
-    mesh: cube3,
-    position: cube3.position,
-    descriptionId: 'cubedescription3'
-  }
-];
-
-const cubes = [cube, cube1, cube2, cube3];
-const hiddenStatuses = new Set(); // status yang ingin disembunyikan
 
 // filter button
 function filterCubesByStatus(status) {
@@ -491,7 +390,7 @@ function setDefaultHomeState() {
   });
 
   // Sembunyikan semua kubus apartemen
-  [cube, cube1, cube2, cube3].forEach(c => c.visible = false);
+  cubes.forEach(c => c.visible = false);
 
   // Reset status orbit/zoom
   orbiting = false;
@@ -553,98 +452,7 @@ document.querySelectorAll('.close-description').forEach(btn => {
   });
 });
 
-// Modal Carousel
-// Data gambar untuk galeri (bisa diganti sesuai POI)
-const galleryMap = {
-  home: ['./hotel.jpg', './hotel1.jpg'],
-  hotel: ['./hotel1.jpg', './hotel.jpg', './apart.jpg'],
-  shop: ['./apart1.jpg', './apart.jpg'],
-
-  cube0: ['./hotel1.jpg', './apart.jpg'],
-  cube1: ['./apart.jpg', './apart1.jpg'],
-  cube2: ['./apart.jpg', './apart1.jpg'],
-  cube3: ['./apart1.jpg', './apart.jpg'],
-};
-
-const modal = document.getElementById('carouselModal');
-const mainImage = document.getElementById('mainCarouselImage');
-const thumbnailsContainer = document.getElementById('carouselThumbnails');
-const closeBtn = document.getElementById('closeCarousel');
-
-// Event: buka modal saat tombol "Gallery" diklik
-document.querySelectorAll('.gallery').forEach(button => {
-  button.addEventListener('click', (e) => {
-    e.stopPropagation();
-
-    const id = button.getAttribute('data-gallery-id');
-    const images = galleryMap[id] || []; // fallback: []
-
-    if (images.length === 0) {
-      alert("Belum ada gambar galeri untuk POI ini.");
-      return;
-    }
-
-    document.getElementById('carouselModal').classList.remove('hidden');
-    updateCarouselImages(images);
-  });
-});
-
-// Event: tutup modal
-closeBtn.addEventListener('click', () => {
-  modal.classList.add('hidden');
-});
-
-let currentCarouselImages = [];
-let currentImageIndex = 0;
-
-function updateMainImage(index) {
-    currentImageIndex = index;
-    mainImage.src = currentCarouselImages[index];
-
-    // Highlight thumbnail aktif
-    const allThumbnails = thumbnailsContainer.querySelectorAll('img');
-    allThumbnails.forEach((thumb, idx) => {
-      if (idx === index) {
-        thumb.classList.add('border-blue-500');
-        thumb.classList.remove('border-transparent');
-      } else {
-        thumb.classList.remove('border-blue-500');
-        thumb.classList.add('border-transparent');
-      }
-    });
-  }
-
-function updateCarouselImages(images) {
-  const mainImage = document.getElementById('mainCarouselImage');
-  const thumbnailsContainer = document.getElementById('carouselThumbnails');
-
-  currentCarouselImages = images;
-  currentImageIndex = 0; // mulai dari gambar pertama
-  thumbnailsContainer.innerHTML = '';
-
-  images.forEach((img, idx) => {
-    const thumb = document.createElement('img');
-    thumb.src = img;
-    thumb.className = `h-20 cursor-pointer rounded border-2 ${idx === 0 ? 'border-blue-500' : 'border-transparent'}`;
-
-    thumb.addEventListener('click', () => updateMainImage(idx));
-
-    thumbnailsContainer.appendChild(thumb);
-  });
-
-  updateMainImage(0); // set gambar utama pertama kali
-  lucide.createIcons();
-}
-
-document.getElementById('prevImage').addEventListener('click', () => {
-  const newIndex = (currentImageIndex - 1 + currentCarouselImages.length) % currentCarouselImages.length;
-  updateMainImage(newIndex);
-});
-
-document.getElementById('nextImage').addEventListener('click', () => {
-  const newIndex = (currentImageIndex + 1) % currentCarouselImages.length;
-  updateMainImage(newIndex);
-});
+setupGallery();
 
 // 🔁 Animasi utama
 function animate() {
