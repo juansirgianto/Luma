@@ -273,7 +273,6 @@ canvas.addEventListener('mousemove', (event) => {
   }
 });
 
-
 // Fungsi: atur visibilitas POI (tombol & deskripsi)
 function setPOIVisibility(visible) {
   POIs.forEach(poi => {
@@ -402,8 +401,8 @@ setDefaultHomeState(); // 🔧 panggil saat pertama kali
 
 // cube click event
 function onCanvasClick(event) {
-  if (currentMode !== 'apartments') return;
-  
+  if (currentMode !== "apartments") return;
+
   clickOnCube = true;
   orbiting = false;
   const rect = canvas.getBoundingClientRect();
@@ -411,8 +410,8 @@ function onCanvasClick(event) {
   mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
   raycaster.setFromCamera(mouse, camera);
-  const visibleCubes = cubes.filter(c => c.visible);
-const intersects = raycaster.intersectObjects(visibleCubes);
+  const visibleCubes = cubes.filter((c) => c.visible);
+  const intersects = raycaster.intersectObjects(visibleCubes);
 
   resetIdleTimer();
 
@@ -420,15 +419,17 @@ const intersects = raycaster.intersectObjects(visibleCubes);
     const clickedCube = intersects[0].object;
 
     // Temukan POI yang sesuai dari cubePOIs
-    const cubePOI = cubePOIs.find(c => c.mesh === clickedCube);
+    const cubePOI = cubePOIs.find((c) => c.mesh === clickedCube);
 
     if (cubePOI) {
       // Zoom & orbit ke cube
       startZoomAndOrbit(cubePOI);
 
       // Tampilkan deskripsi yang sesuai
-      document.querySelectorAll('.description-box').forEach(d => d.style.display = 'none');
-      document.getElementById(cubePOI.descriptionId).style.display = 'block';
+      document
+        .querySelectorAll(".description-box")
+        .forEach((d) => (d.style.display = "none"));
+      document.getElementById(cubePOI.descriptionId).style.display = "block";
 
       // Highlight hijau sementara
       if (!clickedCube.userData.originalColor) {
@@ -442,13 +443,12 @@ const intersects = raycaster.intersectObjects(visibleCubes);
   }
   resetIdleTimer();
   startOrbitAfterDelay(); // tanpa argumen = orbit ke fokus kamera saat ini
-
 }
 
-document.querySelectorAll('.close-description').forEach(btn => {
-  btn.addEventListener('click', (e) => {
+document.querySelectorAll(".close-description").forEach((btn) => {
+  btn.addEventListener("click", (e) => {
     e.stopPropagation();
-    btn.closest('.description-box').style.display = 'none';
+    btn.closest(".description-box").style.display = "none";
   });
 });
 
@@ -461,51 +461,51 @@ function animate() {
   renderer.render(scene, camera);
   updateCameraStats();
 
-  POIs.forEach(p => p.update());
+  POIs.forEach((p) => p.update());
 
   const now = performance.now();
 
   // Reset camera smoothly ke posisi awal
   if (resettingCamera) {
-  const linearT = Math.min(1, (now - resetStartTime) / resetDuration);
-  const t = linearT * linearT * (3 - 2 * linearT); // easing: smoothstep
+    const linearT = Math.min(1, (now - resetStartTime) / resetDuration);
+    const t = linearT * linearT * (3 - 2 * linearT); // easing: smoothstep
 
-  camera.position.lerpVectors(resetFrom, resetTo, t);
-  controls.target.lerpVectors(resetTargetFrom, resetTargetTo, t);
-  controls.update();
+    camera.position.lerpVectors(resetFrom, resetTo, t);
+    controls.target.lerpVectors(resetTargetFrom, resetTargetTo, t);
+    controls.update();
 
-  if (t >= 1) resettingCamera = false;
-}
-
-// 🔄 Animasi ke area apartemen
-if (cameraToNavbar) {
-  const now = performance.now();
-  const linearT = Math.min(1, (now - navbarStartTime) / navbarDuration);
-  const t = linearT * linearT * (3 - 2 * linearT); // smoothstep
-
-  camera.position.lerpVectors(navbarFrom, navbarTo, t);
-  controls.target.lerpVectors(navbarTargetFrom, navbarTargetTo, t);
-  controls.update();
-
-  if (t >= 1) {
-    cameraToNavbar = false;
+    if (t >= 1) resettingCamera = false;
   }
-}
+
+  // 🔄 Animasi ke area apartemen
+  if (cameraToNavbar) {
+    const now = performance.now();
+    const linearT = Math.min(1, (now - navbarStartTime) / navbarDuration);
+    const t = linearT * linearT * (3 - 2 * linearT); // smoothstep
+
+    camera.position.lerpVectors(navbarFrom, navbarTo, t);
+    controls.target.lerpVectors(navbarTargetFrom, navbarTargetTo, t);
+    controls.update();
+
+    if (t >= 1) {
+      cameraToNavbar = false;
+    }
+  }
 
   // Zooming logic
   if (zooming && orbitTarget) {
-  const t = Math.min(1, (now - zoomStartTime) / zoomDuration);
-  const eased = t * t * (3 - 2 * t); // smoothstep
+    const t = Math.min(1, (now - zoomStartTime) / zoomDuration);
+    const eased = t * t * (3 - 2 * t); // smoothstep
 
-  camera.position.lerpVectors(zoomFrom, zoomTo, eased);
-  controls.target.lerpVectors(zoomTargetFrom, zoomTargetTo, eased);
-  controls.update();
+    camera.position.lerpVectors(zoomFrom, zoomTo, eased);
+    controls.target.lerpVectors(zoomTargetFrom, zoomTargetTo, eased);
+    controls.update();
 
-  if (t >= 1) {
-    zooming = false;
-    startOrbitAfterDelay(orbitTarget);
+    if (t >= 1) {
+      zooming = false;
+      startOrbitAfterDelay(orbitTarget);
+    }
   }
-}
 
   // Orbiting logic
   if (orbiting && orbitTarget) {
@@ -518,13 +518,13 @@ if (cameraToNavbar) {
 
     // posisi target orbit
     const nextOrbitPos = new THREE.Vector3(
-    targetPos.x + radius * Math.cos(angle),
-    targetPos.y + 0.5,
-    targetPos.z + radius * Math.sin(angle)
-  );
+      targetPos.x + radius * Math.cos(angle),
+      targetPos.y + 0.5,
+      targetPos.z + radius * Math.sin(angle)
+    );
 
     // lerp dari posisi kamera saat orbit dimulai
-    camera.position.lerp(nextOrbitPos, 0.01)
+    camera.position.lerp(nextOrbitPos, 0.01);
     controls.target.copy(targetPos);
     controls.update();
 
