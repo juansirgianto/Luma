@@ -178,6 +178,21 @@ body {
   color: var(--primary);
 }
 
+.details{
+  border: none;
+  cursor: pointer;
+  border-radius: 30px;
+  margin: 12px;
+  margin-top: 0px;
+  background-color: var(--third);
+  color: var(--primary);
+  padding: 5px;
+  z-index: 999;
+  font-weight: 500;
+  width: 100%;
+  justify-content: center;
+}
+
 .filter {
   position: absolute;
   top: 10px;

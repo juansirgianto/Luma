@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Houses</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./test.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div class="fullscreen-container" id="tracking-area">
+    <!-- Gambar latar -->
+    <img src="houses.jpg" alt="Background" class="bg-image" />
+
+    <div class="absolute top-[10px] left-[20px] text-white flex w-auto bg-[rgba(46,48,71,0.95)] p-[10px] rounded-[25px] items-center z-10">
+      <a href="/" class="text-sm mx-[10px] font-bold">Main</a>
+      <i data-lucide="arrow-right" class="size-3 stroke-[2.5]"></i>
+      <a href="" class="text-sm mx-[10px] font-bold">Houses</a>
+    </div>
+
+    <svg id="map-svg">
+      <a href="/houses/house/1/">
+    <g id="cluster-A" class="hoverable">
+      <path class="path2" d="M 732 940 L 732 950,  741 538, 748 344, 754 355, 770 356, 944 249, 1116 355, 1170 357, 1211 392, 1173 445, 1173 632, 1187 644, 1177 663, 1175 950"
+       stroke="none" stroke-width="1" fill="transparent" />
+       <rect x="905" y="208" width="90" height="30" fill="rgba(0,0,0,0.5)" rx="6" ry="6" />
+       <text x="950" y="230" class="cluster-label">
+        House 1
+      </text>
+    </g>
+    </a>
+    <!-- <g id="cluster-A" class="hoverable">
+      <path class="path2" d="M 1359 727 C 1359 727, 1365 734, 1386 742 C 1386 742, 1455 752, 1536 744 C 1536 744, 1565 668 ,1536 606" stroke="red" stroke-width="1" fill="transparent" />
+    </g> -->
+    </svg>
+
+    <!-- Crosshair dan info koordinat -->
+    <div id="cursorInfo" class="cursor-info">X: 0, Y: 0</div>
+    <div id="xLine" class="axis-line"></div>
+    <div id="yLine" class="axis-line"></div>
+  </div>
+
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+  <script type="module" src="./js/test.js"></script>
+</body>
+</html>

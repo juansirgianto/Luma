@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>House 1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="1.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+<body>
+  <div class="fullscreen-container">
+    <img src="houses.jpg" alt="Background" class="bg-image" />
+    <div class="overlay"></div>
+
+    <!-- Carousel Section -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="relative w-[1200px] max-w-[90%]">
+        <!-- Close Button (optional) -->
+        <!-- <button class="absolute top-2 right-2 bg-white rounded-full p-1 z-10">
+          <i data-lucide="x"></i>
+        </button> -->
+
+        <!-- Carousel -->
+        <div class="relative flex items-center justify-center">
+          <button id="prevBtn" class="absolute left-2 bg-white rounded-full p-2 z-10">
+            <i data-lucide="chevron-left"></i>
+          </button>
+
+          <img id="carouselImage" class="w-[1000px] h-[600px] object-cover rounded-lg shadow-lg" src="./1.jpg" alt="Slide" />
+          
+          
+
+          <button id="nextBtn" class="absolute right-2 bg-white rounded-full p-2 z-10">
+            <i data-lucide="chevron-right"></i>
+          </button>
+        </div>
+        <div class="relative flex w-[600px] max-w-[90%] mx-auto mt-4 overflow-hidden">
+  <!-- Left Arrow -->
+  <button id="thumbLeft"
+          class="absolute left-0 top-1/2 -translate-y-1/2 bg-white rounded-full p-1 shadow z-10">
+    <i data-lucide="chevron-left"></i>
+  </button>
+    <div id="thumbnailScroll" class="flex gap-2 overflow-x-auto scroll-smooth px-6 scrollbar-hide">
+            <img src="./1.jpg" class="thumbnail w-30 h-24 object-cover cursor-pointer border-2 border-transparent rounded" data-index="0" />
+            <img src="./2.jpg" class="thumbnail w-30 h-24 object-cover cursor-pointer border-2 border-transparent rounded" data-index="1" />
+            <img src="./3.jpg" class="thumbnail w-30 h-24 object-cover cursor-pointer border-2 border-transparent rounded" data-index="2" />
+            </div>
+            <button id="thumbRight"
+              class="absolute right-0 top-1/2 -translate-y-1/2 bg-white rounded-full p-1 shadow z-10">
+              <i data-lucide="chevron-right"></i>
+            </button>
+          </div>
+      </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="absolute top-[10px] left-[20px] text-white flex w-auto bg-[rgba(46,48,71,0.95)] p-[10px] rounded-[25px] items-center z-[51]">
+      <a href="/" class="text-sm mx-[10px] font-bold">Main</a>
+      <i data-lucide="arrow-right" class="size-3 stroke-[2.5]"></i>
+      <a href="/houses/" class="text-sm mx-[10px] font-bold">Houses</a>
+      <i data-lucide="arrow-right" class="size-3 stroke-[2.5]"></i>
+      <a href="" class="text-sm mx-[10px] font-bold">House 1</a>
+    </div>
+
+    <div id="homedescription" class="description-box">
+      <div class="flex justify-between">
+        <h1 class="text-l m-[15px] font-bold" >House 1</h1>
+        <h1 class="text-l m-[15px] font-bold" >3Bed 2F</h1>
+      </div>
+      <div class="flex justify-between mx-[15px] text-sm">
+        <span class="text-gray-400">Plot Area</span>
+        <span>1009.93 Sq. M.</span>
+      </div>
+      <div class="flex justify-between mx-[15px] text-sm mb-[12px]">
+        <span class="text-gray-400">Gross Saleable Area</span>
+        <span>669.93 Sq. M.</span>
+      </div>
+      <div class="mx-[15px] text-sm mb-[12px]">
+        <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Blanditiis, repudiandae. Porro officiis magnam incidunt illo amet quo vitae quasi quisquam nihil excepturi velit quos, reprehenderit dolorum id sunt dolorem. Aliquam!</span>
+      </div>
+      <div class="flex justify-between">
+        <button class="gallery mx-[15px] mb-[12px] flex gap-2 text-align-center">
+          <i data-lucide="image" class="size-5 my-auto"></i>
+          <span>Floor Plan</span>
+        </button>
+      </div>
+      <div class="flex justify-between">
+        <button class="gallery mx-[15px] mb-[12px] flex gap-2 text-align-center">
+          <i data-lucide="user" class="size-5 my-auto"></i>
+          <span>Contact Info</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+  <script type="module" src="./1.js"></script>
+</body>
+</html>
