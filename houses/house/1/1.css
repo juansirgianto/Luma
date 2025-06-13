@@ -43,7 +43,7 @@ html, body {
     .content {
       position: relative;
       z-index: 1;
-      color: white;
+      color: var(--third);
       text-align: center;
       font-size: 2rem;
       top: 50%;
@@ -55,7 +55,7 @@ html, body {
     top: 60px;
     left: 20px;
     background: var(--primary-transparant);
-    color: white;
+    color: var(--third);
     border-radius: 25px;
     height: auto;
     width: 300px;
