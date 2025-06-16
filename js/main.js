@@ -26,6 +26,7 @@ const initialControlsTarget = controls.target.clone();
 // 🔌 Gaussian Splats dari Luma AI
 const splats = new LumaSplatsThree({
   source: 'https://lumalabs.ai/capture/32b1ffdf-44cf-42bc-ba15-09f3b0a9a7e8',
+  // source: 'https://lumalabs.ai/capture/32b1ffdf-44cf-42bc-ba15-09f3b0a9a7e8',
   particleRevealEnabled: true
 });
 scene.add(splats);
